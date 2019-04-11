@@ -2,9 +2,17 @@ language: node_js
 node_js:
   - 'node'
   - '10'
-  - '8'
 
 cache: yarn
 install: yarn
 
 script: yarn test
+
+services:
+  - docker
+
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+branch: master
