@@ -9,9 +9,9 @@
 * GraphQL
 * TypeORM
 * Passport.js
-* PostgreSQL
-* Redis caching
-* Docker
+* PostgreSQL (RDS)
+* Redis caching (Elastic cache)
+* Docker (ECR)
 * CI (Travis CI)
 * React.js (latest, without state management library)
 * S3 for satatic and images upload
