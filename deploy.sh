@@ -2,6 +2,8 @@
 pip install --user awscli
 export PATH=$PATH:$HOME/.local/bin
 
+echo 'In deploy script'
+
 # install necessary dependency for ecs-deploy
 add-apt-repository ppa:eugenesan/ppa
 apt-get update
