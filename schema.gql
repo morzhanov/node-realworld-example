@@ -3,8 +3,24 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type Post {
+  id: Int!
+  title: String!
+  content: String!
+  imageUrl: String!
+  author: User!
+  createAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   getUser(id: Float!): User!
+  getPost(id: Float!): Post!
 }
 
 type User {
