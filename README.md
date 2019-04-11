@@ -62,3 +62,22 @@ Or if you can run bash then just,
 ```
 sh run.sh
 ```
+
+## AWS
+
+1. Create AWS Account
+2. Add PostgreSQL DB in RDS
+3. Add Redis in ElastiCache
+4. Add repository in ECR
+5. Add Task definition and Cluster in ECS
+6. Add these invironment varialbles to Travis CI variables:
+   ```
+   AWS_ACCESS_KEY_ID
+   AWS_DEFAULT_REGION
+   AWS_SECRET_ACCESS_KEY
+   CLUSTER_NAME             ## ECS
+   IMAGE_REPO_URL           ## ECR
+   SERVICE_NAME             ## ECS
+   ```
+7. Push to GitHub and run Travis CI pipeline
+
