@@ -23,8 +23,7 @@ docker tag node-realworld-example:latest $IMAGE_REPO_URL:latest
 docker push $IMAGE_REPO_URL:latest
 
 echo $CLUSTER_NAME
-echo $SERVICE_NAME 
-echo $IMAGE_REPO_URL
+eval $(aws ecs list-clusters --active)
 
 # update an AWS ECS service with the new image
 ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_REPO_URL:latest
