@@ -15,4 +15,10 @@ describe('UsersService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  it('should return user by id', async () => {
+    const id = 100;
+    const res = await service.findOneById(id);
+    expect(res.id).toBe(id);
+  });
 });
