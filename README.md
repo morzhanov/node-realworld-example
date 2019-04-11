@@ -1,5 +1,7 @@
 # node-realworld-example
 
+[![Build Status](https://travis-ci.org/morzhanov/node-realworld-example.svg?branch=master)](https://travis-ci.org/morzhanov/node-realworld-example)
+
 # TBD
 
 ## This is an real worls node.js example that considers all main development best practicies:
