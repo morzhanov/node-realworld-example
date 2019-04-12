@@ -7,12 +7,10 @@ cache: yarn
 install: yarn
 
 script: yarn test
-
-services:
-  - docker
-
-deploy:
-  provider: script
-  script: bash deploy.sh
-  on:
-    branch: master
+# services:
+#   - docker
+# deploy:
+#   provider: script
+#   script: bash deploy.sh
+#   on:
+#     branch: master
