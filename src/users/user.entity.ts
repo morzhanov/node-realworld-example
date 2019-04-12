@@ -20,7 +20,7 @@ export class User {
   name: string;
 
   @Field({ nullable: false })
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   email: string;
 
   @Field({ nullable: false })

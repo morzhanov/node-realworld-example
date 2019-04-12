@@ -5,6 +5,7 @@ import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 import { CreatePostInput, PatchPostInput } from './post.inputs';
 
+// TODO: add error handlers
 @Injectable()
 export class PostsService {
   constructor(

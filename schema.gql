@@ -3,10 +3,43 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input CreatePostInput {
+  title: String!
+  content: String!
+  imageUrl: String
+  authorId: Float!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
+
+type Mutation {
+  createUser(createUserData: CreateUserInput!): User!
+  patchUser(patchUserData: PatchUserInput!): User!
+  createPost(createPostData: CreatePostInput!): Post!
+  patchPost(patchPostData: PatchPostInput!): Post!
+  deletePost(postId: Float!): Post!
+}
+
+input PatchPostInput {
+  id: Float!
+  title: String!
+  content: String!
+  imageUrl: String
+}
+
+input PatchUserInput {
+  id: Float!
+  name: String!
+  email: String!
+}
 
 type Post {
   id: Int!
@@ -21,6 +54,7 @@ type Post {
 type Query {
   getUser(id: Float!): User!
   getPost(id: Float!): Post!
+  getPostsByAuthor(authorId: Float!): [Post!]!
 }
 
 type User {

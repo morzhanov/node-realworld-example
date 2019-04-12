@@ -28,7 +28,7 @@ export class PostResolver {
     return await this.postsService.patchPost(patchPostData);
   }
 
-  @Mutation()
+  @Mutation(returns => Post)
   async deletePost(@Args('postId') postId: number) {
     return await this.postsService.deletePost(postId);
   }
