@@ -23,6 +23,10 @@ export class User {
   @Column({ nullable: false, unique: true })
   email: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: false })
+  password: string;
+
   @Field({ nullable: false })
   @CreateDateColumn()
   createAt: Date;

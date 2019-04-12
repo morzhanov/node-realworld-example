@@ -1,25 +1,27 @@
-import { Injectable, Inject, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import { CreateUserInput, PatchUserInput } from './user.inputs';
+import { PatchUserInput } from './user.inputs';
+import { RegistrationInput } from '../auth/auth.inputs';
 
-// TODO: add error handlers
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: UserRepository,
-    @Inject('logger')
-    private readonly logger: Logger,
   ) {}
 
   public async findOneById(id: number): Promise<User> {
     return this.userRepository.findOne({ id });
   }
 
-  public async addUser(userData: CreateUserInput): Promise<User> {
+  public async findOneByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({ email });
+  }
+
+  public async addUser(userData: RegistrationInput): Promise<User> {
     let user = await this.userRepository.findOne({
       where: { email: userData.email },
     });

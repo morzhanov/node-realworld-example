@@ -1,10 +1,11 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:latest"],
   "jsRules": {
     "no-unused-expression": true
   },
   "rules": {
+    "typedef": true,
     "quotemark": [true, "single"],
     "member-access": [false],
     "ordered-imports": [false],

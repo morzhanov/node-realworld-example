@@ -10,22 +10,27 @@ input CreatePostInput {
   authorId: Float!
 }
 
-input CreateUserInput {
-  name: String!
-  email: String!
-}
-
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
 scalar DateTime
 
+input LoginInput {
+  password: String!
+  email: String!
+}
+
+type LoginResponse {
+  token: String!
+}
+
 type Mutation {
-  createUser(createUserData: CreateUserInput!): User!
   patchUser(patchUserData: PatchUserInput!): User!
   createPost(createPostData: CreatePostInput!): Post!
   patchPost(patchPostData: PatchPostInput!): Post!
   deletePost(postId: Float!): Post!
+  login(loginData: LoginInput!): LoginResponse!
+  register(registrationData: RegistrationInput!): RegistrationResponse!
 }
 
 input PatchPostInput {
@@ -52,15 +57,28 @@ type Post {
 }
 
 type Query {
+  me: User!
   getUser(id: Float!): User!
   getPost(id: Float!): Post!
   getPostsByAuthor(authorId: Float!): [Post!]!
+}
+
+input RegistrationInput {
+  password: String!
+  email: String!
+  name: String!
+}
+
+type RegistrationResponse {
+  token: String!
+  user: User!
 }
 
 type User {
   id: Int!
   name: String!
   email: String!
+  password: String
   createAt: DateTime!
   updatedAt: DateTime!
 }

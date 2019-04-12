@@ -1,25 +1,29 @@
-import { Query, Resolver, Mutation } from '@nestjs/graphql';
+import { Args, Query, Resolver, Mutation, Context } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { Args } from '@nestjs/graphql';
-import { CreateUserInput, PatchUserInput } from './user.inputs';
+import { PatchUserInput } from './user.inputs';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from '../auth/gql.auth.guard';
 
 @Resolver(User)
 export class UserResolver {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(new GqlAuthGuard('jwt'))
+  @Query(returns => User)
+  async me(@Context() ctx: any) {
+    return this.usersService.findOneById(ctx.user.id);
+  }
+
+  @UseGuards(new GqlAuthGuard('jwt'))
   @Query(returns => User)
   async getUser(@Args('id') id: number) {
-    return await this.usersService.findOneById(id);
+    return this.usersService.findOneById(id);
   }
 
-  @Mutation(returns => User)
-  async createUser(@Args('createUserData') createUserData: CreateUserInput) {
-    return await this.usersService.addUser(createUserData);
-  }
-
+  @UseGuards(new GqlAuthGuard('jwt'))
   @Mutation(returns => User)
   async patchUser(@Args('patchUserData') patchUserData: PatchUserInput) {
-    return await this.usersService.patchUser(patchUserData);
+    return this.usersService.patchUser(patchUserData);
   }
 }
