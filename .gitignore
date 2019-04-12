@@ -9,6 +9,8 @@ yarn-error.log*
 dist/
 .DS_Store
 
+.env
+
 # Runtime data
 pids
 *.pid
