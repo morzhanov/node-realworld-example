@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConnectionOptions } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { ConfigService } from './config/config.service';
@@ -23,7 +20,6 @@ import { ConfigModule } from './config/config.module';
     PostsModule,
     ConfigModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [ConfigService],
 })
 export class AppModule {}

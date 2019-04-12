@@ -3,21 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
-
-// TODO: remove this when handle mutattions
-export interface CreatePostData {
-  title: string;
-  content: string;
-  authorId: number;
-  imageUrl: string;
-}
-
-export interface PatchPostData {
-  id: number;
-  title: string;
-  content: string;
-  imageUrl: string;
-}
+import { CreatePostInput, PatchPostInput } from './post.inputs';
 
 @Injectable()
 export class PostsService {
@@ -34,11 +20,11 @@ export class PostsService {
     return this.postRepository.findOne({ id });
   }
 
-  public async addPost(postData: CreatePostData): Promise<Post> {
+  public async addPost(postData: CreatePostInput): Promise<Post> {
     return this.postRepository.create(postData);
   }
 
-  public async patchPost(postData: PatchPostData): Promise<void> {
+  public async patchPost(postData: PatchPostInput): Promise<void> {
     await this.postRepository.update({ id: postData.id }, postData);
   }
 

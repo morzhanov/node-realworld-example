@@ -3,18 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-
-// TODO: remove this when handle mutattions
-export interface CreateUserData {
-  name: string;
-  email: string;
-}
-
-export interface PatchUserData {
-  id: number;
-  name: string;
-  email: string;
-}
+import { CreateUserInput, PatchUserInput } from './user.inputs';
 
 @Injectable()
 export class UsersService {
@@ -27,11 +16,11 @@ export class UsersService {
     return this.userRepository.findOne({ id });
   }
 
-  public async addUser(userData: CreateUserData): Promise<User> {
+  public async addUser(userData: CreateUserInput): Promise<User> {
     return this.userRepository.create(userData);
   }
 
-  public async patchUser(userData: PatchUserData): Promise<void> {
+  public async patchUser(userData: PatchUserInput): Promise<void> {
     await this.userRepository.update({ id: userData.id }, userData);
   }
 }
