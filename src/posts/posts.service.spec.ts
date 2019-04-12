@@ -5,7 +5,10 @@ import { PostsService } from './posts.service';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 
+jest.mock('./post.repository');
+
 describe('PostsService', () => {
+  const postRepositoryMock = new PostRepository();
   let service: PostsService;
 
   beforeEach(async () => {
@@ -14,7 +17,7 @@ describe('PostsService', () => {
         PostsService,
         {
           provide: getRepositoryToken(Post),
-          useClass: PostRepository,
+          useValue: postRepositoryMock,
         },
       ],
     }).compile();
@@ -27,14 +30,16 @@ describe('PostsService', () => {
   });
 
   it('should get post by id', async () => {
-    const post = await service.findOneById(200);
-    expect(post.id).toBe(200);
-    expect(post.title).toBeDefined();
+    const postId = 1000;
+    await service.findOneById(postId);
+
+    expect(postRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.findOne).toHaveBeenCalledWith({ id: postId });
   });
 
   it('should get posts', async () => {
-    const post = await service.getPosts();
-    expect(post.length).toBeGreaterThan(0);
-    expect(post[0].title).toBeDefined();
+    await service.getPosts();
+
+    expect(postRepositoryMock.find).toHaveBeenCalledTimes(1);
   });
 });

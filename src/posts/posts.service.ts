@@ -14,36 +14,10 @@ export class PostsService {
   ) {}
 
   public async getPosts(): Promise<Post[]> {
-    return new Promise(resolve => {
-      const post = new Post();
-      post.id = 200;
-      post.author = new User();
-      post.author.id = 200;
-      post.author.email = 'email';
-      post.author.name = 'name';
-      post.content = 'Content';
-      post.title = 'Title';
-      post.imageUrl = 'image url';
-      post.createAt = new Date();
-      post.updatedAt = new Date();
-      resolve([post]);
-    });
+    return this.postRepository.find();
   }
 
   public async findOneById(id: number): Promise<Post> {
-    return new Promise(resolve => {
-      const post = new Post();
-      post.id = id;
-      post.author = new User();
-      post.author.id = id;
-      post.author.email = 'email';
-      post.author.name = 'name';
-      post.content = 'Content';
-      post.title = 'Title';
-      post.imageUrl = 'image url';
-      post.createAt = new Date();
-      post.updatedAt = new Date();
-      resolve(post);
-    });
+    return this.postRepository.findOne({ id });
   }
 }
