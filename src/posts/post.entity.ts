@@ -16,9 +16,8 @@ import { User } from '../users/user.entity';
 @ObjectType()
 export class Post extends BaseEntity {
   @Field(type => Int)
-  @Field({ nullable: false })
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Field({ nullable: false })
   @Column({
@@ -40,11 +39,11 @@ export class Post extends BaseEntity {
   @JoinColumn()
   author: User;
 
-  @Field({ nullable: false })
+  @Field()
   @CreateDateColumn()
-  createAt: Date;
+  createAt?: Date;
 
-  @Field({ nullable: false })
+  @Field()
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt?: Date;
 }

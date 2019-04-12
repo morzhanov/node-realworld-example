@@ -37,9 +37,50 @@ describe('PostsService', () => {
     expect(postRepositoryMock.findOne).toHaveBeenCalledWith({ id: postId });
   });
 
-  it('should get posts', async () => {
-    await service.getPosts();
+  it('should get posts by author id', async () => {
+    const authorId = 1000;
+    await service.getPostsByAuthor(authorId);
 
     expect(postRepositoryMock.find).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.find).toHaveBeenLastCalledWith({
+      where: { author: authorId },
+    });
+  });
+
+  it('should create post', async () => {
+    const postData = {
+      title: 'Post title',
+      content: 'Post content',
+      authorId: 1000,
+      imageUrl: 'image url',
+    };
+    await service.addPost(postData);
+
+    expect(postRepositoryMock.create).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.create).toHaveBeenCalledWith(postData);
+  });
+
+  it('should edit post', async () => {
+    const newPostData = {
+      id: 1000,
+      title: 'Post title new',
+      content: 'Post content new',
+      imageUrl: 'image url new',
+    };
+    await service.patchPost(newPostData);
+
+    expect(postRepositoryMock.update).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.update).toHaveBeenCalledWith(
+      { id: newPostData.id },
+      newPostData,
+    );
+  });
+
+  it('should delete post', async () => {
+    const postId = 1000;
+    await service.deletePost(postId);
+
+    expect(postRepositoryMock.delete).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.delete).toHaveBeenCalledWith({ id: postId });
   });
 });
