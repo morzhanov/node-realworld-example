@@ -37,9 +37,29 @@ describe('UserService', () => {
     expect(userRepositoryMock.findOne).toHaveBeenCalledWith({ id: userId });
   });
 
-  it('should get users', async () => {
-    await service.getUsers();
+  it('should create user', async () => {
+    const userData = {
+      email: 'user email',
+      name: 'User name',
+    };
+    await service.addUser(userData);
 
-    expect(userRepositoryMock.find).toHaveBeenCalledTimes(1);
+    expect(userRepositoryMock.create).toHaveBeenCalledTimes(1);
+    expect(userRepositoryMock.create).toHaveBeenCalledWith(userData);
+  });
+
+  it('should edit user', async () => {
+    const newUserData = {
+      id: 1000,
+      email: 'user email new',
+      name: 'User name new',
+    };
+    await service.patchUser(newUserData);
+
+    expect(userRepositoryMock.update).toHaveBeenCalledTimes(1);
+    expect(userRepositoryMock.update).toHaveBeenCalledWith(
+      { id: newUserData.id },
+      newUserData,
+    );
   });
 });
