@@ -10,6 +10,13 @@ dist/
 .DS_Store
 
 .env
+.env.development
+.env.staging
+.env.production
+
+build
+
+src/public
 
 # Runtime data
 pids
