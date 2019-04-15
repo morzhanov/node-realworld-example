@@ -52,7 +52,6 @@ export default function withForm(Component: any) {
 
         const { data } = await fn({ variables: values });
         session.set(authMode === AuthMode.LOGIN ? data.login.token : data.register.token);
-        session.setHeader();
         location.reload();
       } catch (e) {
         const errors = helpers.parseErrors(e.graphQLErrors);

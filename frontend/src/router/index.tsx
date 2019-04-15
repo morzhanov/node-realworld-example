@@ -4,9 +4,9 @@ import { Router, Switch } from 'react-router';
 
 import { Header } from '../components/shared/Header';
 import { Footer } from '../components/shared/Footer';
-import AsyncAuth from '../components/Auth/AsyncAuth';
-import AsyncHome from '../components/Home/AsyncHome';
-import AsyncAccount from '../components/Profile/AsyncProfile';
+import { Auth } from '../components/Auth';
+import { Home } from '../components/Home';
+import { Profile } from '../components/Profile';
 import routeUrls from '../configs/routeUrls';
 import { AuthRoute, PrivateRoute } from './GuardRoutes';
 
@@ -15,10 +15,10 @@ const router = ({ history }: { history: History }) => (
     <>
       <Header />
       <Switch>
-        <AuthRoute exact path={routeUrls.auth.login} render={() => <AsyncAuth />} />
-        <AuthRoute exact path={routeUrls.auth.signup} render={() => <AsyncAuth />} />
-        <PrivateRoute exact path={routeUrls.home} render={() => <AsyncHome />} />
-        <PrivateRoute xact path={routeUrls.profile} render={() => <AsyncAccount />} />
+        <AuthRoute exact path={routeUrls.auth.login} render={() => <Auth />} />
+        <AuthRoute exact path={routeUrls.auth.signup} render={() => <Auth />} />
+        <PrivateRoute exact path={routeUrls.home} render={() => <Home />} />
+        <PrivateRoute xact path={routeUrls.profile} render={() => <Profile />} />
       </Switch>
       <Footer />
     </>

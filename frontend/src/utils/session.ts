@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import storage from './storage';
 
 export default {
@@ -8,14 +6,8 @@ export default {
     return authToken && !!authToken.trim();
   },
 
-  setHeader() {
-    if (this.isTokenSet()) {
-      axios.defaults.headers.Authorization = `Token ${storage.get('token')}`;
-    }
-  },
-
-  removeHeader() {
-    axios.defaults.headers.Authorization = '';
+  get() {
+    return storage.get('token');
   },
 
   set(tokenValue: string) {

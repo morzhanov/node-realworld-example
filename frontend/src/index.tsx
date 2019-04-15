@@ -4,9 +4,6 @@ import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 import { App } from './components/App';
-import session from './utils/session';
-
-session.setHeader();
 
 const history: History = createBrowserHistory();
 

@@ -59,7 +59,7 @@ type Query {
   me: User!
   getUser(id: Float!): User!
   getPost(id: Float!): Post!
-  getPostsByAuthor(authorId: Float!): [Post!]!
+  getPosts: [Post!]!
 }
 
 input RegistrationInput {

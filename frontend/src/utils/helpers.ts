@@ -17,7 +17,6 @@ interface GraphQLError {
 
 export default {
   logOut() {
-    session.removeHeader();
     session.remove();
     window.location.href = routeUrls.home;
   },

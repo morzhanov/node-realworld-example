@@ -18,8 +18,8 @@ export class PostResolver {
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Query(returns => [Post])
-  async getPostsByAuthor(@Args('authorId') authorId: number) {
-    return this.postsService.getPostsByAuthor(authorId);
+  async getPosts(@Context() ctx: any) {
+    return this.postsService.getPostsByAuthor(ctx.user.id);
   }
 
   @UseGuards(new GqlAuthGuard('jwt'))
