@@ -7,7 +7,7 @@ export const PrivateRoute = ({ render, ...rest }: any) => (
   <Route
     {...rest}
     render={(props: any) =>
-      session.isTokenSet() ? render(props) : <Redirect to={routeUrls.auth} />
+      session.isTokenSet() ? render(props) : <Redirect to={routeUrls.auth.login} />
     }
   />
 );

@@ -1,31 +1,43 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
+import { withRouter } from 'react-router-dom';
 import { Form, FormikProps, Field, FieldProps } from 'formik';
 import { Input } from '@material-ui/core';
 
 import { withGql } from './AuthGql';
 import withForm, { FormValues } from './AuthForm';
+import { RouterProps } from 'react-router';
+import routeUrls from '../../configs/routeUrls';
 
 const AuthWrapper = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-enum AuthMode {
+export enum AuthMode {
   LOGIN,
   SIGNUP
 }
 
-function Auth({ touched, isSubmitting, isValid, errors }: FormikProps<FormValues>) {
+function Auth({
+  touched,
+  isSubmitting,
+  isValid,
+  errors,
+  history: {
+    location: { pathname },
+    push
+  }
+}: FormikProps<FormValues> & RouterProps) {
   const [showPassword, setShowPassword] = React.useState(false);
-  const [authMode, setAuthMode] = React.useState(AuthMode.LOGIN);
+  const authMode = pathname === routeUrls.auth.login ? AuthMode.LOGIN : AuthMode.SIGNUP;
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
   const toggleAuthMode = () => {
-    setAuthMode(authMode === AuthMode.LOGIN ? AuthMode.SIGNUP : AuthMode.LOGIN);
+    push(authMode === AuthMode.LOGIN ? routeUrls.auth.signup : routeUrls.auth.login);
   };
 
   return (
@@ -51,7 +63,7 @@ function Auth({ touched, isSubmitting, isValid, errors }: FormikProps<FormValues
                 <Input {...field} type="text" name="name" />
               )}
             />
-            {touched.email && errors.email && <span className="error">{errors.email}</span>}
+            {touched.email && errors.email && <span className="error">{errors.name}</span>}
           </div>
         )}
         <div className="form-input-wrapper">
@@ -83,4 +95,4 @@ function Auth({ touched, isSubmitting, isValid, errors }: FormikProps<FormValues
   );
 }
 
-export default withGql(withForm(Auth));
+export default withRouter(withGql(withForm(Auth)));

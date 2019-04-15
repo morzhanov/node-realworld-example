@@ -15,7 +15,8 @@ const router = ({ history }: { history: History }) => (
     <>
       <Header />
       <Switch>
-        <AuthRoute exact path={routeUrls.auth} render={() => <AsyncAuth />} />
+        <AuthRoute exact path={routeUrls.auth.login} render={() => <AsyncAuth />} />
+        <AuthRoute exact path={routeUrls.auth.signup} render={() => <AsyncAuth />} />
         <PrivateRoute exact path={routeUrls.home} render={() => <AsyncHome />} />
         <PrivateRoute xact path={routeUrls.profile} render={() => <AsyncAccount />} />
       </Switch>

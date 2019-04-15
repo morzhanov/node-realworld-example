@@ -11,8 +11,8 @@ const LOGIN = gql`
 `;
 
 const SIGNUP = gql`
-  mutation SignUp($email: String!, $password: String!, $name: String!) {
-    signup(loginData: { email: $email, password: $password, name: $name }) {
+  mutation Register($email: String!, $password: String!, $name: String!) {
+    register(registrationData: { email: $email, password: $password, name: $name }) {
       token
     }
   }
@@ -28,16 +28,16 @@ function withLogin(Component: any) {
   );
 }
 
-function withSignUp(Component: any) {
+function withRegister(Component: any) {
   return (props: any) => (
     <Mutation mutation={SIGNUP}>
-      {(login: () => void, { data }: MutationResult<any>) => (
-        <Component signup={login} signUpData={data} {...props} />
+      {(register: () => void, { data }: MutationResult<any>) => (
+        <Component signup={register} signUpData={data} {...props} />
       )}
     </Mutation>
   );
 }
 
 export function withGql(Component: any) {
-  return (props: any) => withSignUp(withLogin(Component))(props);
+  return (props: any) => withRegister(withLogin(Component))(props);
 }

@@ -1,5 +1,8 @@
 export default {
-  profile: '/profile',
-  auth: '/auth',
-  home: '/'
+  auth: {
+    login: '/login',
+    signup: '/signup'
+  },
+  home: '/',
+  profile: '/profile'
 };

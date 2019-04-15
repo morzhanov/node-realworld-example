@@ -5,6 +5,7 @@ import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { PatchUserInput } from './user.inputs';
 import { RegistrationInput } from '../auth/auth.inputs';
+import { GqlError } from '../utils/gql.error';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,10 @@ export class UsersService {
     });
 
     if (user) {
-      throw new Error('User with this email already exists');
+      throw new GqlError({
+        error: 'User with this email already exists',
+        field: 'email',
+      });
     }
 
     user = new User();

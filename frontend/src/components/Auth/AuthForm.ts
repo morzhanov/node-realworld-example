@@ -1,25 +1,35 @@
 import { FormikErrors, FormikBag, withFormik } from 'formik';
 import { toast } from 'react-toastify';
+import { History } from 'history';
 
 import session from '../../utils/session';
 import helpers from '../../utils/helpers';
+import routeUrls from '../../configs/routeUrls';
+import { AuthMode } from './Auth';
 
 export interface FormValues {
   email: string;
   password: string;
-  [key: string]: string;
+  name?: string;
+  [key: string]: string | undefined;
 }
 
 export interface FormProps {
   login: (variables: any) => any;
   signup: (variables: any) => any;
-  emailError?: string;
-  passwordError?: string;
+  history: History;
 }
 
 export default function withForm(Component: any) {
   return withFormik<FormProps, FormValues>({
-    mapPropsToValues: () => ({ email: '', password: '' }),
+    mapPropsToValues: ({
+      history: {
+        location: { pathname }
+      }
+    }: FormProps) =>
+      pathname === routeUrls.auth.login
+        ? { email: '', password: '' }
+        : { email: '', password: '', name: '' },
 
     validate: (values: FormValues) => {
       const errors: FormikErrors<FormValues> = {};
@@ -34,10 +44,14 @@ export default function withForm(Component: any) {
 
     handleSubmit: async (values: FormValues, bag: FormikBag<FormProps, FormValues>) => {
       try {
-        const { data } = await bag.props.login({
-          variables: { email: values.email, password: values.password }
-        });
-        session.set(data.login.token);
+        const authMode =
+          bag.props.history.location.pathname === routeUrls.auth.login
+            ? AuthMode.LOGIN
+            : AuthMode.SIGNUP;
+        const fn = authMode === AuthMode.LOGIN ? bag.props.login : bag.props.signup;
+
+        const { data } = await fn({ variables: values });
+        session.set(authMode === AuthMode.LOGIN ? data.login.token : data.register.token);
         session.setHeader();
         location.reload();
       } catch (e) {
