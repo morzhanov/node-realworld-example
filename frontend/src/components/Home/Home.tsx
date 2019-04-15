@@ -9,6 +9,6 @@ const HomeWrapper = styled.div`
 type Props = {};
 
 // TODO: add elements from material ui
-const Home = ({  }: Props) => <HomeWrapper />;
+const Home = ({  }: Props) => <HomeWrapper>Home</HomeWrapper>;
 
 export default Home;

@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt-nodejs';
 import { UsersService } from '../users/users.service';
 import { LoginInput, RegistrationInput } from './auth.inputs';
 import { LoginResponse, RegistrationResponse } from './auth.outputs';
+import { GqlError, ErrorData } from '../utils/gql.error';
 
 export interface JwtPayload {
   id: number;
@@ -31,11 +32,16 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new GqlError({ error: 'User not found', field: 'email' });
     }
 
     if (!(await this.comparePassword(password, user.password))) {
-      throw new Error('Not valid credentials');
+      throw new GqlError({
+        errors: [
+          { error: 'Not valid credentials', field: 'email' },
+          { error: 'Not valid credentials', field: 'password' },
+        ],
+      });
     }
 
     return { token: await this.jwtService.sign({ id: user.id }) };
