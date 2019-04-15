@@ -7,7 +7,6 @@ input CreatePostInput {
   title: String!
   content: String!
   imageUrl: String
-  authorId: Float!
 }
 
 """
@@ -28,7 +27,7 @@ type Mutation {
   patchUser(patchUserData: PatchUserInput!): User!
   createPost(createPostData: CreatePostInput!): Post!
   patchPost(patchPostData: PatchPostInput!): Post!
-  deletePost(postId: Float!): Post!
+  deletePost(postId: Float!): String!
   login(loginData: LoginInput!): LoginResponse!
   register(registrationData: RegistrationInput!): RegistrationResponse!
 }
@@ -52,7 +51,7 @@ type Post {
   content: String!
   imageUrl: String!
   author: User!
-  createAt: DateTime!
+  createdAt: DateTime!
   updatedAt: DateTime!
 }
 
@@ -78,7 +77,6 @@ type User {
   id: Int!
   name: String!
   email: String!
-  password: String
   createAt: DateTime!
   updatedAt: DateTime!
 }

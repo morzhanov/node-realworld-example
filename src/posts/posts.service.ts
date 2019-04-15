@@ -5,7 +5,6 @@ import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
 import { CreatePostInput, PatchPostInput } from './post.inputs';
 
-// TODO: add error handlers
 @Injectable()
 export class PostsService {
   constructor(
@@ -14,22 +13,45 @@ export class PostsService {
   ) {}
 
   public async getPostsByAuthor(authorId: number): Promise<Post[]> {
-    return this.postRepository.find({ where: { author: authorId } });
+    return this.postRepository.find({ where: { authorId } });
   }
 
   public async findOneById(id: number): Promise<Post> {
     return this.postRepository.findOne({ id });
   }
 
-  public async addPost(postData: CreatePostInput): Promise<Post> {
-    return this.postRepository.create(postData);
+  public async addPost(
+    postData: CreatePostInput,
+    authorId: number,
+  ): Promise<Post> {
+    const post = new Post();
+    Object.keys(postData).forEach(key => (post[key] = postData[key]));
+    post.authorId = authorId;
+    const res = await this.postRepository.save(post);
+
+    return this.postRepository.findOne({ id: res.id });
   }
 
-  public async patchPost(postData: PatchPostInput): Promise<void> {
-    await this.postRepository.update({ id: postData.id }, postData);
+  public async patchPost(postData: PatchPostInput): Promise<Post> {
+    const post = await this.postRepository.findOne({ id: postData.id });
+
+    if (!post) {
+      throw new Error('Post not exists');
+    }
+
+    Object.keys(postData).forEach(key => (post[key] = postData[key]));
+    await this.postRepository.save(post);
+
+    return this.findOneById(postData.id);
   }
 
   public async deletePost(id: number): Promise<void> {
+    const post = await this.postRepository.findOne({ id });
+
+    if (!post) {
+      throw new Error('Post not exists');
+    }
+
     await this.postRepository.delete({ id });
   }
 }

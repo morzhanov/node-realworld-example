@@ -34,6 +34,9 @@ export class Post extends BaseEntity {
   @Column({ nullable: true })
   imageUrl: string;
 
+  @Column({ type: 'int', nullable: false })
+  authorId: number;
+
   @Field({ nullable: false })
   @ManyToOne(type => User, { eager: true })
   @JoinColumn()
@@ -41,7 +44,7 @@ export class Post extends BaseEntity {
 
   @Field()
   @CreateDateColumn()
-  createAt?: Date;
+  createdAt?: Date;
 
   @Field()
   @UpdateDateColumn()

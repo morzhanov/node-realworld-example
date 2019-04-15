@@ -5,7 +5,6 @@ export class CreatePostInput {
   @Field() title: string;
   @Field() content: string;
   @Field({ nullable: true }) imageUrl?: string;
-  @Field() authorId: number;
 }
 
 @InputType()
