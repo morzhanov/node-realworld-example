@@ -39,9 +39,11 @@ const GET_POSTS = gql`
 function Home() {
   return (
     <Query query={GET_POSTS}>
-      {({ loading, error, data: { getPosts } }: QueryResult<any, any>) => {
+      {({ loading, error, data }: QueryResult<any, any>) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
+        const { getPosts } = data;
+
         return (
           <HomeWrapper>
             Home

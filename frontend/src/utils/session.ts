@@ -12,7 +12,6 @@ export default {
 
   set(tokenValue: string) {
     storage.set('token', tokenValue);
-    this.setHeader();
   },
 
   remove() {
