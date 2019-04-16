@@ -16,6 +16,5 @@ export default {
 
   remove() {
     storage.remove('token');
-    this.removeHeader();
   }
 };

@@ -18,7 +18,7 @@ interface GraphQLError {
 export default {
   logOut() {
     session.remove();
-    window.location.href = routeUrls.home;
+    location.href = routeUrls.auth.login;
   },
 
   parseErrors(errs: GraphQLError[]): any {
