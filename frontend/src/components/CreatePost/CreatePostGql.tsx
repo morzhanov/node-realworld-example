@@ -22,6 +22,12 @@ const CREATE_POST = gql`
   }
 `;
 
+const CREATE_SIGNED_URL = gql`
+  mutation Signurl($filename: String!, $mimetype: String!) {
+    signUrl(filename: $filename, mimetype: $mimetype)
+  }
+`;
+
 function withCreatePost(Component: any) {
   return (props: any) => (
     <Mutation mutation={CREATE_POST}>
@@ -32,6 +38,16 @@ function withCreatePost(Component: any) {
   );
 }
 
+function withSignedUrl(Component: any) {
+  return (props: any) => (
+    <Mutation mutation={CREATE_SIGNED_URL}>
+      {(signUrl: () => void, { data }: MutationResult<any>) => (
+        <Component createSignedUrl={signUrl} createSignedUrlResult={data} {...props} />
+      )}
+    </Mutation>
+  );
+}
+
 export function withGql(Component: any) {
-  return (props: any) => withCreatePost(Component)(props);
+  return (props: any) => withCreatePost(withSignedUrl(Component))(props);
 }

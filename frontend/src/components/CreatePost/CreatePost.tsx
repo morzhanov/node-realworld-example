@@ -26,6 +26,8 @@ function CreatePost({
   touched,
   isSubmitting,
   isValid,
+  handleChange,
+  setFieldValue,
   errors
 }: FormikProps<FormValues> & RouterProps) {
   return (
@@ -55,21 +57,21 @@ function CreatePost({
             />
             {touched.content && errors.content && <span>{errors.content}</span>}
           </div>
-          {/* TODO: Add input type file and upload image */}
           <div>
             <label>Image</label>
             <Field
-              name="imageUrl"
-              render={({ field }: { field: FieldProps }) => (
-                <Input {...field} type="text" name="imageUrl" />
-              )}
+              name="image"
+              type="file"
+              onChange={(e: any) => {
+                setFieldValue('file', e.target.files[0]);
+                handleChange(e);
+              }}
             />
             {touched.imageUrl && errors.imageUrl && <span>{errors.imageUrl}</span>}
           </div>
           <div>
-            <button type="submit" disabled={isSubmitting && isValid}>
-              Create
-            </button>
+            {/* <button type="submit" disabled={isSubmitting && isValid}> */}
+            <button type="submit">Create</button>
           </div>
         </Form>
       </Container>

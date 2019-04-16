@@ -1,5 +1,6 @@
 import { FormikErrors, FormikBag, withFormik } from 'formik';
 import { toast } from 'react-toastify';
+import qs from 'query-string';
 import { History } from 'history';
 
 import helpers from '../../utils/helpers';
@@ -7,19 +8,22 @@ import routeUrls from '../../configs/routeUrls';
 
 export interface FormValues {
   content: string;
-  imageUrl: string;
+  image: string;
+  file?: File;
   title: string;
-  [key: string]: string;
+  [key: string]: string | File | undefined;
 }
 
 export interface FormProps {
   createPost: (variables: any) => any;
+  createSignedUrl: (variables: any) => any;
+  createSignedUrlResult: any;
   history: History;
 }
 
 export default function withForm(Component: any) {
   return withFormik<FormProps, FormValues>({
-    mapPropsToValues: () => ({ title: '', content: '', imageUrl: '' }),
+    mapPropsToValues: () => ({ title: '', content: '', image: '' }),
 
     validate: (values: FormValues) => {
       const errors: FormikErrors<FormValues> = {};
@@ -34,11 +38,36 @@ export default function withForm(Component: any) {
 
     handleSubmit: async (values: FormValues, bag: FormikBag<FormProps, FormValues>) => {
       try {
-        const { data } = await bag.props.createPost({ variables: values });
+        if (!values.file) return;
+
+        const {
+          data: { signUrl }
+        } = await bag.props.createSignedUrl({
+          variables: { filename: values.file.name, mimetype: values.file.type }
+        });
+
+        const credentials = qs.parse(signUrl.substring(signUrl.indexOf('?') + 1));
+
+        const formData = new FormData();
+        Object.keys(credentials).forEach((key: string) => formData.append(key, credentials[key]));
+        formData.append('file', values.file);
+
+        const res = await fetch(signUrl, {
+          body: values.file,
+          headers: {
+            'content-type': 'multipart/form-data'
+          },
+          method: 'PUT'
+        });
+
+        const { url } = res;
+        const { data } = await bag.props.createPost({
+          variables: { ...values, imageUrl: url.substring(0, url.indexOf('?')) }
+        });
         const {
           createPost: { id }
         } = data;
-        // TODO: go to create post
+        // TODO: go to created post
         toast.success(`New Post with id = ${id} created`);
         bag.props.history.push(routeUrls.home);
       } catch (e) {

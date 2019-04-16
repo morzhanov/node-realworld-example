@@ -10,7 +10,11 @@ export class UploadResolver {
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Mutation(returns => String)
-  async signUrl(@Args('filename') filename: string, @Context() ctx: any) {
-    return this.uploadService.createSignedUrl(filename, ctx.user.id);
+  async signUrl(
+    @Args('filename') filename: string,
+    @Args('mimetype') mimetype: string,
+    @Context() ctx: any,
+  ) {
+    return this.uploadService.createSignedUrl(filename, mimetype, ctx.user.id);
   }
 }

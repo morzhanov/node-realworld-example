@@ -26,6 +26,7 @@ const StyledList = styled(List)`
 
 const StyledPapper = styled(Paper)`
   padding: 16px;
+  min-width: calc(100% - 32px);
 ` as typeof Paper;
 
 const H1 = styled(Typography)`

@@ -30,7 +30,7 @@ type Mutation {
   deletePost(postId: Float!): String!
   login(loginData: LoginInput!): LoginResponse!
   register(registrationData: RegistrationInput!): RegistrationResponse!
-  signUrl(filename: String!): String!
+  signUrl(mimetype: String!, filename: String!): String!
 }
 
 input PatchPostInput {
