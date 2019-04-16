@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, AccountCircle, ExitToApp } from '@material-ui/icons';
+import { Home, AccountCircle, ExitToApp, Add } from '@material-ui/icons';
 import styled from '@emotion/styled';
 
 import routeUrls from '../../../configs/routeUrls';
@@ -31,10 +31,17 @@ const HomeIcon = styled(Home)`
   cursor: pointer;
 ` as typeof Home;
 
+const AddIcon = styled(Add)`
+  font-size: 40px !important;
+  color: #000;
+  cursor: pointer;
+` as typeof Add;
+
 const ProfileIcon = styled(AccountCircle)`
   font-size: 40px !important;
   color: #000;
   cursor: pointer;
+  margin-right: 18px;
 ` as typeof AccountCircle;
 
 const LogOutIcon = styled(ExitToApp)`
@@ -58,6 +65,9 @@ const Header = ({  }: Props) => {
         </Link>
         <Link to={routeUrls.profile}>
           <ProfileIcon />
+        </Link>
+        <Link to={routeUrls.post.create}>
+          <AddIcon />
         </Link>
         <LogOutIcon onClick={helpers.logOut} />
       </Nav>

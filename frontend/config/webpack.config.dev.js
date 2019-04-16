@@ -49,7 +49,10 @@ module.exports = {
     rules: [
       {
         test: /\.(tsx|ts)?$/,
-        use: ['babel-loader', 'ts-loader']
+        use: [
+          'babel-loader',
+          { loader: 'ts-loader', options: { transpileOnly: true, experimentalWatchApi: true } }
+        ]
       },
       {
         test: /\.(css|scss|sass)$/,
@@ -102,10 +105,6 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     // Add module names to factory functions so they appear in browser profiler.
     new webpack.NamedModulesPlugin(),
-    // Watcher doesn't work well if you mistype casing in a path so we use
-    // a plugin that prints an error when you attempt to do this.
-    // See https://github.com/facebookincubator/create-react-app/issues/240
-    new CaseSensitivePathsPlugin(),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
     // solution that requires the user to opt into importing specific locales.

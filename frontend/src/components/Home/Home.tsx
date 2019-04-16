@@ -1,8 +1,11 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import gql from 'graphql-tag';
+import { withRouter } from 'react-router-dom';
 import { Query, QueryResult } from 'react-apollo';
 import { List, ListItem, Paper, Typography, CardMedia } from '@material-ui/core';
+import { RouterProps } from 'react-router';
+import routeUrls from '../../configs/routeUrls';
 
 const HomeWrapper = styled.div`
   width: 100%;
@@ -73,7 +76,7 @@ const GET_POSTS = gql`
   }
 `;
 
-function Home() {
+function Home({ history: { push } }: RouterProps) {
   return (
     <Query query={GET_POSTS}>
       {({ loading, error, data }: QueryResult<any, any>) => {
@@ -91,7 +94,12 @@ function Home() {
                 <ListItem key={post.id}>
                   <StyledPapper>
                     <ItemImage src={post.imageUrl} image={post.imageUrl} />
-                    <ItemTitle component="h5" variant="h5">
+                    {/* TODO: make this link */}
+                    <ItemTitle
+                      onClick={() => push(routeUrls.post.view.link(post.id))}
+                      component="h5"
+                      variant="h5"
+                    >
                       {post.title}
                     </ItemTitle>
                     <ItemContent component="p">{post.content.substring(0, 400)}&#8230;</ItemContent>
@@ -107,4 +115,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withRouter(Home);

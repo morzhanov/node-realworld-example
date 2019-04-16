@@ -44,7 +44,7 @@ function Auth({
     <AuthWrapper>
       <h1>{authMode === AuthMode.LOGIN ? 'Sign In' : 'Sign Up'}</h1>
       <Form>
-        <div className="form-input-wrapper">
+        <div>
           <label>Email</label>
           <Field
             name="email"
@@ -52,10 +52,10 @@ function Auth({
               <Input {...field} type="email" name="email" />
             )}
           />
-          {touched.email && errors.email && <span className="error">{errors.email}</span>}
+          {touched.email && errors.email && <span>{errors.email}</span>}
         </div>
         {authMode === AuthMode.SIGNUP && (
-          <div className="form-input-wrapper">
+          <div>
             <label>Name</label>
             <Field
               name="name"
@@ -63,10 +63,10 @@ function Auth({
                 <Input {...field} type="text" name="name" />
               )}
             />
-            {touched.email && errors.email && <span className="error">{errors.name}</span>}
+            {touched.email && errors.email && <span>{errors.name}</span>}
           </div>
         )}
-        <div className="form-input-wrapper">
+        <div>
           <label>Password</label>
           <Field
             name="password"
@@ -77,7 +77,7 @@ function Auth({
           <button type="button" onClick={toggleShowPassword}>
             {showPassword ? 'hide' : 'show'}
           </button>
-          {touched.password && errors.password && <span className="error">{errors.password}</span>}
+          {touched.password && errors.password && <span>{errors.password}</span>}
         </div>
         <span>
           {authMode === AuthMode.LOGIN ? 'Not regitered ' : 'Already member'}?{' '}
