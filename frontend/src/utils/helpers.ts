@@ -21,6 +21,10 @@ export default {
     location.href = routeUrls.auth.login;
   },
 
+  getIdFromParams() {
+    return location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
+  },
+
   parseErrors(errs: GraphQLError[]): any {
     const errors: any = {};
     for (const err of errs) {

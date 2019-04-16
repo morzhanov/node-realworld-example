@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import routeUrls from '../../../configs/routeUrls';
 import session from '../../../utils/session';
 import helpers from '../../../utils/helpers';
+import Container from '../../shared/Container';
 
 const HeaderWrapper = styled.header`
   height: 64px;
@@ -22,6 +23,7 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  position: relative;
 `;
 
 const HomeIcon = styled(Home)`
@@ -48,7 +50,7 @@ const LogOutIcon = styled(ExitToApp)`
   font-size: 40px !important;
   color: #000;
   position: absolute;
-  right: 16px;
+  right: 50px;
   cursor: pointer;
 ` as typeof ExitToApp;
 
@@ -59,18 +61,20 @@ const Header = ({  }: Props) => {
 
   return isAuthenticated ? (
     <HeaderWrapper>
-      <Nav>
-        <Link to={routeUrls.home}>
-          <HomeIcon />
-        </Link>
-        <Link to={routeUrls.profile}>
-          <ProfileIcon />
-        </Link>
-        <Link to={routeUrls.post.create}>
-          <AddIcon />
-        </Link>
-        <LogOutIcon onClick={helpers.logOut} />
-      </Nav>
+      <Container>
+        <Nav>
+          <Link to={routeUrls.home}>
+            <HomeIcon />
+          </Link>
+          <Link to={routeUrls.profile}>
+            <ProfileIcon />
+          </Link>
+          <Link to={routeUrls.post.create}>
+            <AddIcon />
+          </Link>
+          <LogOutIcon onClick={helpers.logOut} />
+        </Nav>
+      </Container>
     </HeaderWrapper>
   ) : null;
 };

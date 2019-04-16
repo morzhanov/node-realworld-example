@@ -1,18 +1,19 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import gql from 'graphql-tag';
+import * as dayjs from 'dayjs';
 import { Query, QueryResult } from 'react-apollo';
-import { Paper, Typography, CardMedia } from '@material-ui/core';
+import { Typography, CardMedia } from '@material-ui/core';
+
+import helpers from '../../utils/helpers';
+import Container from '../shared/Container';
 
 const PostWrapper = styled.div`
   width: 100%;
+  min-height: calc(100% - 200px);
   padding-top: 32px;
   padding-bottom: 32px;
 `;
-
-const StyledPapper = styled(Paper)`
-  padding: 16px;
-` as typeof Paper;
 
 const H1 = styled(Typography)`
   width: 100%;
@@ -22,16 +23,29 @@ const H1 = styled(Typography)`
 
 const PostContent = styled(Typography)`
   margin-bottom: 12px !important;
+  line-height: 24px !important;
 ` as typeof Typography;
 
+const Content = styled.div`
+  width: 100%;
+`;
+
 const PostImage = styled(CardMedia)`
-  width: 140px;
-  height: 140px;
-  margin-right: 16px;
-  float: left;
+  width: 100%;
+  height: 500px;
 ` as typeof CardMedia;
 
+const PostInfo = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const AuthorName = styled(Typography)`
+  font-size: 18px;
+` as typeof Typography;
+
+const Date = styled(Typography)`
   font-size: 18px;
 ` as typeof Typography;
 
@@ -57,6 +71,7 @@ const GET_POST = gql`
       imageUrl
       createdAt
       author {
+        id
         name
       }
     }
@@ -64,9 +79,9 @@ const GET_POST = gql`
 `;
 
 function Post() {
-  const postId = location.search.substr(1);
+  const id = +helpers.getIdFromParams();
   return (
-    <Query query={GET_POST} variables={{ postId }}>
+    <Query query={GET_POST} variables={{ id }}>
       {({ loading, error, data }: QueryResult<any, any>) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
@@ -81,15 +96,19 @@ function Post() {
 
         return (
           <PostWrapper>
-            <H1 component="h1" variant="h3">
-              {title}
-            </H1>
-            <PostImage src={imageUrl} />
-            <AuthorName>Author: {name}</AuthorName>
-            {createdAt}
-            <StyledPapper>
-              <PostContent>{content}</PostContent>
-            </StyledPapper>
+            <Container>
+              <H1 component="h1" variant="h3">
+                {title}
+              </H1>
+              <PostImage image={imageUrl} src={imageUrl} />
+              <Content>
+                <PostInfo>
+                  <AuthorName component="span">Author: {name}</AuthorName>
+                  <Date component="span">{dayjs(createdAt).format('MMM DD YYYY')}</Date>
+                </PostInfo>
+                <PostContent>{content}</PostContent>
+              </Content>
+            </Container>
           </PostWrapper>
         );
       }}

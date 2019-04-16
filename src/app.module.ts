@@ -7,6 +7,7 @@ import { ConfigService } from './config/config.service';
 import { ConfigModule } from './config/config.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule,
     ConfigModule,
     AuthModule,
+    UploadModule,
   ],
   providers: [ConfigService],
 })

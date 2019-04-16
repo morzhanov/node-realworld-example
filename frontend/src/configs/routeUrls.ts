@@ -6,8 +6,8 @@ export default {
   home: '/',
   post: {
     create: '/post/create',
-    edit: { link: (id: number) => `/post/${id}/edit`, path: '/post/:id/edit' },
-    view: { link: (id: number) => `/post/${id}`, path: '/post/:id' }
+    edit: { link: (id: number) => `/post/edit/${id}`, path: '/post/edit/:id' },
+    view: { link: (id: number) => `/post/view/${id}`, path: '/post/view/:id' }
   },
   profile: '/profile'
 };

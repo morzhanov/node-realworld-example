@@ -1,16 +1,21 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
 import gql from 'graphql-tag';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Query, QueryResult } from 'react-apollo';
 import { List, ListItem, Paper, Typography, CardMedia } from '@material-ui/core';
-import { RouterProps } from 'react-router';
 import routeUrls from '../../configs/routeUrls';
+import Container from '../shared/Container';
 
 const HomeWrapper = styled.div`
   width: 100%;
   padding-top: 32px;
   padding-bottom: 32px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #000;
 `;
 
 const StyledList = styled(List)`
@@ -76,7 +81,7 @@ const GET_POSTS = gql`
   }
 `;
 
-function Home({ history: { push } }: RouterProps) {
+function Home() {
   return (
     <Query query={GET_POSTS}>
       {({ loading, error, data }: QueryResult<any, any>) => {
@@ -86,28 +91,29 @@ function Home({ history: { push } }: RouterProps) {
 
         return (
           <HomeWrapper>
-            <H1 component="h1" variant="h3">
-              Your posts
-            </H1>
-            <StyledList>
-              {getPosts.map((post: PostData) => (
-                <ListItem key={post.id}>
-                  <StyledPapper>
-                    <ItemImage src={post.imageUrl} image={post.imageUrl} />
-                    {/* TODO: make this link */}
-                    <ItemTitle
-                      onClick={() => push(routeUrls.post.view.link(post.id))}
-                      component="h5"
-                      variant="h5"
-                    >
-                      {post.title}
-                    </ItemTitle>
-                    <ItemContent component="p">{post.content.substring(0, 400)}&#8230;</ItemContent>
-                    <AuthorName component="span">Author: {post.author.name}</AuthorName>
-                  </StyledPapper>
-                </ListItem>
-              ))}
-            </StyledList>
+            <Container>
+              <H1 component="h1" variant="h3">
+                Your posts
+              </H1>
+              <StyledList>
+                {getPosts.map((post: PostData) => (
+                  <ListItem key={post.id}>
+                    <StyledPapper>
+                      <ItemImage src={post.imageUrl} image={post.imageUrl} />
+                      <StyledLink to={routeUrls.post.view.link(post.id)}>
+                        <ItemTitle component="h5" variant="h5">
+                          {post.title}
+                        </ItemTitle>
+                      </StyledLink>
+                      <ItemContent component="p">
+                        {post.content.substring(0, 400)}&#8230;
+                      </ItemContent>
+                      <AuthorName component="span">Author: {post.author.name}</AuthorName>
+                    </StyledPapper>
+                  </ListItem>
+                ))}
+              </StyledList>
+            </Container>
           </HomeWrapper>
         );
       }}
@@ -115,4 +121,4 @@ function Home({ history: { push } }: RouterProps) {
   );
 }
 
-export default withRouter(Home);
+export default Home;

@@ -8,6 +8,7 @@ import { withGql } from './AuthGql';
 import withForm, { FormValues } from './AuthForm';
 import { RouterProps } from 'react-router';
 import routeUrls from '../../configs/routeUrls';
+import Container from '../shared/Container';
 
 const AuthWrapper = styled.div`
   width: 100%;
@@ -42,55 +43,57 @@ function Auth({
 
   return (
     <AuthWrapper>
-      <h1>{authMode === AuthMode.LOGIN ? 'Sign In' : 'Sign Up'}</h1>
-      <Form>
-        <div>
-          <label>Email</label>
-          <Field
-            name="email"
-            render={({ field }: { field: FieldProps }) => (
-              <Input {...field} type="email" name="email" />
-            )}
-          />
-          {touched.email && errors.email && <span>{errors.email}</span>}
-        </div>
-        {authMode === AuthMode.SIGNUP && (
+      <Container>
+        <h1>{authMode === AuthMode.LOGIN ? 'Sign In' : 'Sign Up'}</h1>
+        <Form>
           <div>
-            <label>Name</label>
+            <label>Email</label>
             <Field
-              name="name"
+              name="email"
               render={({ field }: { field: FieldProps }) => (
-                <Input {...field} type="text" name="name" />
+                <Input {...field} type="email" name="email" />
               )}
             />
-            {touched.email && errors.email && <span>{errors.name}</span>}
+            {touched.email && errors.email && <span>{errors.email}</span>}
           </div>
-        )}
-        <div>
-          <label>Password</label>
-          <Field
-            name="password"
-            render={({ field }: { field: FieldProps }) => (
-              <Input {...field} type={showPassword ? 'text' : 'password'} name="password" />
-            )}
-          />
-          <button type="button" onClick={toggleShowPassword}>
-            {showPassword ? 'hide' : 'show'}
-          </button>
-          {touched.password && errors.password && <span>{errors.password}</span>}
-        </div>
-        <span>
-          {authMode === AuthMode.LOGIN ? 'Not regitered ' : 'Already member'}?{' '}
-          <button type="button" onClick={toggleAuthMode}>
-            Sign {authMode === AuthMode.LOGIN ? 'Up' : 'In'}
-          </button>
-        </span>
-        <div>
-          <button type="submit" disabled={isSubmitting && isValid}>
-            {authMode === AuthMode.LOGIN ? 'Sign In' : 'Sign Up'}
-          </button>
-        </div>
-      </Form>
+          {authMode === AuthMode.SIGNUP && (
+            <div>
+              <label>Name</label>
+              <Field
+                name="name"
+                render={({ field }: { field: FieldProps }) => (
+                  <Input {...field} type="text" name="name" />
+                )}
+              />
+              {touched.email && errors.email && <span>{errors.name}</span>}
+            </div>
+          )}
+          <div>
+            <label>Password</label>
+            <Field
+              name="password"
+              render={({ field }: { field: FieldProps }) => (
+                <Input {...field} type={showPassword ? 'text' : 'password'} name="password" />
+              )}
+            />
+            <button type="button" onClick={toggleShowPassword}>
+              {showPassword ? 'hide' : 'show'}
+            </button>
+            {touched.password && errors.password && <span>{errors.password}</span>}
+          </div>
+          <span>
+            {authMode === AuthMode.LOGIN ? 'Not regitered ' : 'Already member'}?{' '}
+            <button type="button" onClick={toggleAuthMode}>
+              Sign {authMode === AuthMode.LOGIN ? 'Up' : 'In'}
+            </button>
+          </span>
+          <div>
+            <button type="submit" disabled={isSubmitting && isValid}>
+              {authMode === AuthMode.LOGIN ? 'Sign In' : 'Sign Up'}
+            </button>
+          </div>
+        </Form>
+      </Container>
     </AuthWrapper>
   );
 }
