@@ -1,6 +1,6 @@
 import { FormikErrors, FormikBag, withFormik } from 'formik';
 import { toast } from 'react-toastify';
-import qs from 'query-string';
+import * as qs from 'query-string';
 import { History } from 'history';
 
 import helpers from '../../utils/helpers';
@@ -67,9 +67,8 @@ export default function withForm(Component: any) {
         const {
           createPost: { id }
         } = data;
-        // TODO: go to created post
         toast.success(`New Post with id = ${id} created`);
-        bag.props.history.push(routeUrls.home);
+        bag.props.history.push(routeUrls.post.view.link(id));
       } catch (e) {
         const errors = helpers.parseErrors(e.graphQLErrors);
         if (errors.nonFieldError) {
