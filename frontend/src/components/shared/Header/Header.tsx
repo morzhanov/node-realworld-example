@@ -7,6 +7,7 @@ import routeUrls from '../../../configs/routeUrls';
 import session from '../../../utils/session';
 import helpers from '../../../utils/helpers';
 import Container from '../../shared/Container';
+import BaseIcon from '../BaseIcon/BaseIcon';
 
 const HeaderWrapper = styled.header`
   height: 64px;
@@ -26,32 +27,15 @@ const Nav = styled.nav`
   position: relative;
 `;
 
-const HomeIcon = styled(FaHome)`
-  font-size: 32px !important;
-  color: #000;
-  margin-right: 32px;
-  cursor: pointer;
-`;
+const HomeIcon = BaseIcon.withComponent(FaHome);
 
-const AddIcon = styled(FaPlus)`
-  font-size: 32px !important;
-  color: #000;
-  cursor: pointer;
-`;
+const AddIcon = BaseIcon.withComponent(FaPlus);
 
-const ProfileIcon = styled(FaUser)`
-  font-size: 32px !important;
-  color: #000;
-  cursor: pointer;
-  margin-right: 32px;
-`;
+const ProfileIcon = BaseIcon.withComponent(FaUser);
 
-const LogOutIcon = styled(FaPowerOff)`
-  font-size: 32px !important;
-  color: #000;
+const LogOutIcon = styled(BaseIcon.withComponent(FaPowerOff))`
   position: absolute;
   right: 50px;
-  cursor: pointer;
 `;
 
 type Props = {};

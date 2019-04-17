@@ -1,12 +1,15 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { FormikProps, Form, Field } from 'formik';
+import { FormikProps } from 'formik';
 import { defer } from 'lodash';
 import { withRouter, RouterProps } from 'react-router';
 
 import { withGql } from './ProfileGql';
 import withForm, { FormValues } from './ProfileForm';
 import Container from '../shared/Container';
+import { FormItem } from '../shared/FormItem';
+import { BaseForm } from '../shared/BaseForm';
+import { SubmitButton } from '../shared/SubmitButton';
 
 const { useState } = React;
 
@@ -25,14 +28,17 @@ const PageWrapper = styled.div`
   padding-left: 16px;
 `;
 
-const Input = styled(Field)`
-  width: 200px;
-`;
-
 const H1 = styled.h1`
   width: 100%;
   text-align: center;
   margin-bottom: 32px !important;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  button {
+    margin-right: 24px;
+  }
 `;
 
 function Profile({
@@ -66,20 +72,17 @@ function Profile({
   return (
     <PageWrapper>
       <Container>
-        <H1>Profile</H1>
-        <Form>
-          <div>
-            <label>Email</label>
-            <Input name="email" disabled={!edit} />
-            {touched.email && errors.email && <span>{errors.email}</span>}
-          </div>
-          <div>
-            <label>Name</label>
-            <Input name="name" disabled={!edit} />
-            {touched.name && errors.name && <span>{errors.name}</span>}
-          </div>
-          <div>
-            <button
+        <BaseForm>
+          <H1>Profile</H1>
+          <FormItem label="Email" name="email" disabled={!edit} touched={touched} errors={errors} />
+          <FormItem label="Name" name="name" disabled={!edit} touched={touched} errors={errors} />
+          <Buttons>
+            {edit && (
+              <SubmitButton type="button" onClick={() => toggleEdit()}>
+                Cancel
+              </SubmitButton>
+            )}
+            <SubmitButton
               type="button"
               disabled={isSubmitting && isValid}
               onClick={() => {
@@ -88,9 +91,9 @@ function Profile({
               }}
             >
               {edit ? 'Save' : 'Edit'}
-            </button>
-          </div>
-        </Form>
+            </SubmitButton>
+          </Buttons>
+        </BaseForm>
       </Container>
     </PageWrapper>
   );

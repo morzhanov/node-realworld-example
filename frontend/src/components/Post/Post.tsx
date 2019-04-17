@@ -10,6 +10,7 @@ import helpers from '../../utils/helpers';
 import Container from '../shared/Container';
 import { RouterProps } from 'react-router';
 import routeUrls from '../../configs/routeUrls';
+import BaseIcon from '../shared/BaseIcon/BaseIcon';
 
 const PostWrapper = styled.div`
   width: 100%;
@@ -25,12 +26,9 @@ const H1 = styled.h1`
   margin-bottom: 32px !important;
 `;
 
-const EditIcon = styled(FaEdit)`
-  font-size: 40px !important;
+const EditIcon = styled(BaseIcon.withComponent(FaEdit))`
   position: absolute;
   right: 16px;
-  color: #000;
-  cursor: pointer;
 `;
 
 const PostContent = styled.p`
