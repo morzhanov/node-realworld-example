@@ -8,6 +8,7 @@ import { ConfigModule } from './config/config.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { UploadModule } from './upload/upload.module';
+import { MainController } from './main.controller';
 
 @Module({
   imports: [
@@ -29,5 +30,6 @@ import { UploadModule } from './upload/upload.module';
     UploadModule,
   ],
   providers: [ConfigService],
+  controllers: [MainController],
 })
 export class AppModule {}
