@@ -24,7 +24,10 @@ export class UserResolver {
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Mutation(returns => User)
-  async patchUser(@Args('patchUserData') patchUserData: PatchUserInput) {
-    return this.usersService.patchUser(patchUserData);
+  async patchUser(
+    @Args('patchUserData') patchUserData: PatchUserInput,
+    @Context() ctx: any,
+  ) {
+    return this.usersService.patchUser(patchUserData, ctx.user.id);
   }
 }

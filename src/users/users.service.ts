@@ -39,8 +39,8 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  public async patchUser(userData: PatchUserInput): Promise<User> {
-    const user = await this.userRepository.findOne({ id: userData.id });
+  public async patchUser(userData: PatchUserInput, id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
 
     if (!user) {
       throw new Error('User not exists');

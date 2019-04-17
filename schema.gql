@@ -41,7 +41,6 @@ input PatchPostInput {
 }
 
 input PatchUserInput {
-  id: Float!
   name: String!
   email: String!
 }

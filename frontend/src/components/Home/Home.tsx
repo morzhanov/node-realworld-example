@@ -23,12 +23,15 @@ const List = styled.ul`
   overflow: scroll;
   padding-top: 16px;
   padding-bottom: 16px;
+  padding-inline-end: 0;
+  padding-inline-start: 0;
 `;
 
 const ListItem = styled.li`
   box-shadow: 0 2px 19px 0 rgba(0, 0, 0, 0.05);
   margin-bottom: 16px;
   background: #fff;
+  min-height: 170px;
 `;
 
 const StyledPapper = styled.div`
