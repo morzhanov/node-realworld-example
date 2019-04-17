@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 import { Query, QueryResult } from 'react-apollo';
-import { List, ListItem, Paper, Typography, CardMedia } from '@material-ui/core';
+
 import routeUrls from '../../configs/routeUrls';
 import Container from '../shared/Container';
 
@@ -18,41 +18,49 @@ const StyledLink = styled(Link)`
   color: #000;
 `;
 
-const StyledList = styled(List)`
+const List = styled.ul`
+  list-style: none;
   overflow: scroll;
   padding-top: 16px;
   padding-bottom: 16px;
-` as typeof List;
+`;
 
-const StyledPapper = styled(Paper)`
+const ListItem = styled.li`
+  box-shadow: 0 2px 19px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+  background: #fff;
+`;
+
+const StyledPapper = styled.div`
   padding: 16px;
   min-width: calc(100% - 32px);
-` as typeof Paper;
+`;
 
-const H1 = styled(Typography)`
+const H1 = styled.h1`
   width: 100%;
   text-align: center;
   margin-bottom: 32px !important;
-` as typeof Typography;
+`;
 
-const ItemTitle = styled(Typography)`
+const ItemTitle = styled.h3`
+  margin: 0;
   margin-bottom: 12px !important;
-` as typeof Typography;
+`;
 
-const ItemContent = styled(Typography)`
+const ItemContent = styled.p`
   margin-bottom: 12px !important;
-` as typeof Typography;
+`;
 
-const ItemImage = styled(CardMedia)`
+const ItemImage = styled.img`
   width: 140px;
   height: 140px;
   margin-right: 16px;
   float: left;
-` as typeof CardMedia;
+`;
 
-const AuthorName = styled(Typography)`
+const AuthorName = styled.span`
   font-size: 18px;
-` as typeof Typography;
+`;
 
 interface Author {
   name: string;
@@ -93,27 +101,21 @@ function Home() {
         return (
           <HomeWrapper>
             <Container>
-              <H1 component="h1" variant="h3">
-                Your posts
-              </H1>
-              <StyledList>
+              <H1>Your posts</H1>
+              <List>
                 {getPosts.map((post: PostData) => (
                   <ListItem key={post.id}>
                     <StyledPapper>
-                      <ItemImage src={post.imageUrl} image={post.imageUrl} />
+                      <ItemImage src={post.imageUrl} />
                       <StyledLink to={routeUrls.post.view.link(post.id)}>
-                        <ItemTitle component="h5" variant="h5">
-                          {post.title}
-                        </ItemTitle>
+                        <ItemTitle>{post.title}</ItemTitle>
                       </StyledLink>
-                      <ItemContent component="p">
-                        {post.content.substring(0, 400)}&#8230;
-                      </ItemContent>
-                      <AuthorName component="span">Author: {post.author.name}</AuthorName>
+                      <ItemContent>{post.content.substring(0, 400)}&#8230;</ItemContent>
+                      <AuthorName>Author: {post.author.name}</AuthorName>
                     </StyledPapper>
                   </ListItem>
                 ))}
-              </StyledList>
+              </List>
             </Container>
           </HomeWrapper>
         );

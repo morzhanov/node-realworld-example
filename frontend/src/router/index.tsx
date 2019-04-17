@@ -23,6 +23,7 @@ const router = ({ history }: { history: History }) => (
         <PrivateRoute xact path={routeUrls.profile} render={() => <Profile />} />
         <PrivateRoute xact path={routeUrls.post.view.path} render={() => <Post />} />
         <PrivateRoute xact path={routeUrls.post.create} render={() => <CreatePost />} />
+        <PrivateRoute xact path={routeUrls.post.edit.path} render={() => <CreatePost />} />
       </Switch>
       <Footer />
     </>

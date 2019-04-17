@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, AccountCircle, ExitToApp, Add } from '@material-ui/icons';
+import { FaHome, FaUser, FaPowerOff, FaPlus } from 'react-icons/fa';
 import styled from '@emotion/styled';
 
 import routeUrls from '../../../configs/routeUrls';
@@ -26,33 +26,33 @@ const Nav = styled.nav`
   position: relative;
 `;
 
-const HomeIcon = styled(Home)`
-  font-size: 40px !important;
+const HomeIcon = styled(FaHome)`
+  font-size: 32px !important;
   color: #000;
-  margin-right: 18px;
+  margin-right: 32px;
   cursor: pointer;
-` as typeof Home;
+`;
 
-const AddIcon = styled(Add)`
-  font-size: 40px !important;
-  color: #000;
-  cursor: pointer;
-` as typeof Add;
-
-const ProfileIcon = styled(AccountCircle)`
-  font-size: 40px !important;
+const AddIcon = styled(FaPlus)`
+  font-size: 32px !important;
   color: #000;
   cursor: pointer;
-  margin-right: 18px;
-` as typeof AccountCircle;
+`;
 
-const LogOutIcon = styled(ExitToApp)`
-  font-size: 40px !important;
+const ProfileIcon = styled(FaUser)`
+  font-size: 32px !important;
+  color: #000;
+  cursor: pointer;
+  margin-right: 32px;
+`;
+
+const LogOutIcon = styled(FaPowerOff)`
+  font-size: 32px !important;
   color: #000;
   position: absolute;
   right: 50px;
   cursor: pointer;
-` as typeof ExitToApp;
+`;
 
 type Props = {};
 

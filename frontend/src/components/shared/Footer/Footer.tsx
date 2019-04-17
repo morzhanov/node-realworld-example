@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { Typography } from '@material-ui/core';
 
 import Container from '../../shared/Container';
 
@@ -18,7 +17,7 @@ const FooterWrapper = styled.footer`
 const Footer = () => (
   <FooterWrapper>
     <Container>
-      <Typography component="p">Node Realworld Example</Typography>
+      <p>Node Realworld Example</p>
     </Container>
   </FooterWrapper>
 );

@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { withRouter } from 'react-router-dom';
 import { Form, FormikProps, Field, FieldProps } from 'formik';
-import { Input } from '@material-ui/core';
 
 import { withGql } from './AuthGql';
 import withForm, { FormValues } from './AuthForm';
@@ -13,6 +12,10 @@ import Container from '../shared/Container';
 const AuthWrapper = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const Input = styled.input`
+  width: 200px;
 `;
 
 export enum AuthMode {
@@ -48,34 +51,19 @@ function Auth({
         <Form>
           <div>
             <label>Email</label>
-            <Field
-              name="email"
-              render={({ field }: { field: FieldProps }) => (
-                <Input {...field} type="email" name="email" />
-              )}
-            />
+            <Field name="email" type="email" />
             {touched.email && errors.email && <span>{errors.email}</span>}
           </div>
           {authMode === AuthMode.SIGNUP && (
             <div>
               <label>Name</label>
-              <Field
-                name="name"
-                render={({ field }: { field: FieldProps }) => (
-                  <Input {...field} type="text" name="name" />
-                )}
-              />
+              <Field name="name" type="text" />
               {touched.email && errors.email && <span>{errors.name}</span>}
             </div>
           )}
           <div>
             <label>Password</label>
-            <Field
-              name="password"
-              render={({ field }: { field: FieldProps }) => (
-                <Input {...field} type={showPassword ? 'text' : 'password'} name="password" />
-              )}
-            />
+            <Field name="password" type={showPassword ? 'text' : 'password'} name="password" />
             <button type="button" onClick={toggleShowPassword}>
               {showPassword ? 'hide' : 'show'}
             </button>

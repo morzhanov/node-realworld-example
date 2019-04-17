@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { Typography, Input, TextField } from '@material-ui/core';
 import { FormikProps, Form, Field, FieldProps } from 'formik';
 import { withRouter, RouterProps } from 'react-router';
 
@@ -16,11 +15,19 @@ const PageWrapper = styled.div`
   padding-left: 16px;
 `;
 
-const H1 = styled(Typography)`
+const Input = styled.input`
+  width: 200px;
+`;
+
+const TextField = styled.textarea`
+  width: 200px;
+`;
+
+const H1 = styled.h1`
   width: 100%;
   text-align: center;
   margin-bottom: 32px !important;
-` as typeof Typography;
+`;
 
 function CreatePost({
   touched,
@@ -33,16 +40,14 @@ function CreatePost({
   return (
     <PageWrapper>
       <Container>
-        <H1 component="h1" variant="h3">
-          Create new post
-        </H1>
+        <H1>Create new post</H1>
         <Form>
           <div>
             <label>Title</label>
             <Field
               name="title"
               render={({ field }: { field: FieldProps }) => (
-                <Input {...field} type="text" name="title" />
+                <Input {...field.field} type="text" name="title" />
               )}
             />
             {touched.title && errors.title && <span>{errors.title}</span>}
@@ -52,7 +57,7 @@ function CreatePost({
             <Field
               name="content"
               render={({ field }: { field: FieldProps }) => (
-                <TextField {...field} type="text" name="content" multiline />
+                <TextField {...field.field} name="content" />
               )}
             />
             {touched.content && errors.content && <span>{errors.content}</span>}

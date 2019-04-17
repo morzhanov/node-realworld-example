@@ -1,12 +1,15 @@
 import * as React from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from '@emotion/styled';
 import gql from 'graphql-tag';
 import * as dayjs from 'dayjs';
 import { Query, QueryResult } from 'react-apollo';
-import { Typography, CardMedia } from '@material-ui/core';
+import { FaEdit } from 'react-icons/fa';
 
 import helpers from '../../utils/helpers';
 import Container from '../shared/Container';
+import { RouterProps } from 'react-router';
+import routeUrls from '../../configs/routeUrls';
 
 const PostWrapper = styled.div`
   width: 100%;
@@ -15,25 +18,34 @@ const PostWrapper = styled.div`
   padding-bottom: 32px;
 `;
 
-const H1 = styled(Typography)`
+const H1 = styled.h1`
   width: 100%;
   text-align: center;
+  position: relative;
   margin-bottom: 32px !important;
-` as typeof Typography;
+`;
 
-const PostContent = styled(Typography)`
+const EditIcon = styled(FaEdit)`
+  font-size: 40px !important;
+  position: absolute;
+  right: 16px;
+  color: #000;
+  cursor: pointer;
+`;
+
+const PostContent = styled.p`
   margin-bottom: 12px !important;
   line-height: 24px !important;
-` as typeof Typography;
+`;
 
 const Content = styled.div`
   width: 100%;
 `;
 
-const PostImage = styled(CardMedia)`
+const PostImage = styled.img`
   width: 100%;
   height: 500px;
-` as typeof CardMedia;
+`;
 
 const PostInfo = styled.p`
   display: flex;
@@ -41,13 +53,13 @@ const PostInfo = styled.p`
   justify-content: space-between;
 `;
 
-const AuthorName = styled(Typography)`
+const AuthorName = styled.span`
   font-size: 18px;
-` as typeof Typography;
+`;
 
-const Date = styled(Typography)`
+const Date = styled.span`
   font-size: 18px;
-` as typeof Typography;
+`;
 
 interface Author {
   name: string;
@@ -78,15 +90,15 @@ const GET_POST = gql`
   }
 `;
 
-function Post() {
-  const id = +helpers.getIdFromParams();
+function Post({ history: { push } }: RouterProps) {
   return (
-    <Query query={GET_POST} variables={{ id }}>
+    <Query query={GET_POST} variables={{ id: +helpers.getIdFromParams() }}>
       {({ loading, error, data }: QueryResult<any, any>) => {
         if (loading) return 'Loading...';
         if (error) return `Error! ${error.message}`;
         const { getPost }: { getPost: PostData } = data;
         const {
+          id,
           title,
           content,
           imageUrl,
@@ -97,14 +109,14 @@ function Post() {
         return (
           <PostWrapper>
             <Container>
-              <H1 component="h1" variant="h3">
-                {title}
+              <H1>
+                {title} <EditIcon onClick={() => push(routeUrls.post.edit.link(id))} />
               </H1>
-              <PostImage image={imageUrl} src={imageUrl} />
+              <PostImage src={imageUrl} />
               <Content>
                 <PostInfo>
-                  <AuthorName component="span">Author: {name}</AuthorName>
-                  <Date component="span">{dayjs(createdAt).format('MMM DD YYYY')}</Date>
+                  <AuthorName>Author: {name}</AuthorName>
+                  <Date>{dayjs(createdAt).format('MMM DD YYYY')}</Date>
                 </PostInfo>
                 <PostContent>{content}</PostContent>
               </Content>
@@ -116,4 +128,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default withRouter(Post);
