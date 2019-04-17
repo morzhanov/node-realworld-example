@@ -51,7 +51,10 @@ const ItemContent = styled.p`
   margin-bottom: 12px !important;
 `;
 
-const ItemImage = styled.img`
+const ItemImage = styled.div`
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 140px;
   height: 140px;
   margin-right: 16px;
@@ -106,7 +109,7 @@ function Home() {
                 {getPosts.map((post: PostData) => (
                   <ListItem key={post.id}>
                     <StyledPapper>
-                      <ItemImage src={post.imageUrl} />
+                      <ItemImage style={{ backgroundImage: `url(${post.imageUrl})` }} />
                       <StyledLink to={routeUrls.post.view.link(post.id)}>
                         <ItemTitle>{post.title}</ItemTitle>
                       </StyledLink>

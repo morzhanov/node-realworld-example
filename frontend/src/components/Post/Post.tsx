@@ -42,9 +42,12 @@ const Content = styled.div`
   width: 100%;
 `;
 
-const PostImage = styled.img`
+const PostImage = styled.div`
   width: 100%;
   height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const PostInfo = styled.p`
@@ -74,7 +77,7 @@ interface PostData {
   author: Author;
 }
 
-const GET_POST = gql`
+export const GET_POST = gql`
   query GetPost($id: Float!) {
     getPost(id: $id) {
       id
@@ -112,7 +115,7 @@ function Post({ history: { push } }: RouterProps) {
               <H1>
                 {title} <EditIcon onClick={() => push(routeUrls.post.edit.link(id))} />
               </H1>
-              <PostImage src={imageUrl} />
+              <PostImage style={{ backgroundImage: `url(${imageUrl})` }} />
               <Content>
                 <PostInfo>
                   <AuthorName>Author: {name}</AuthorName>
