@@ -6,5 +6,5 @@ export default styled(Form)`
   max-width: 400px;
   padding: 16px;
   margin: auto;
-  margin-top: 20%;
+  margin-top: 10%;
 `;

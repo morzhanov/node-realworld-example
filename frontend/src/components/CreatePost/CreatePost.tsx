@@ -1,12 +1,15 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { FormikProps, Form, Field } from 'formik';
+import { FormikProps } from 'formik';
 import { defer } from 'lodash';
 import { withRouter, RouterProps } from 'react-router';
 
 import { withGql } from './CreatePostGql';
 import withForm, { FormValues } from './CreatePostForm';
 import Container from '../shared/Container';
+import { BaseForm } from '../shared/BaseForm';
+import { FormItem } from '../shared/FormItem';
+import { SubmitButton } from '../shared/SubmitButton';
 
 const { useState } = React;
 
@@ -27,14 +30,6 @@ const PageWrapper = styled.div`
   padding-top: 32px;
   padding-bottom: 32px;
   padding-left: 16px;
-`;
-
-const Input = styled(Field)`
-  width: 200px;
-`;
-
-const Textarea = styled(Field)`
-  width: 200px;
 `;
 
 const FileImage = styled.div`
@@ -67,12 +62,9 @@ function CreatePost({
   if (loading) return 'Loading...';
 
   const [fielImage, setFileImage] = useState();
-
   const isEdit = getPostData && getPostData.getPost;
-
-  // TODO: add image for file
-
   const imageUrl = getPostData && getPostData.getPost ? getPostData.getPost.imageUrl : '';
+
   if (isEdit && !dirty) {
     const {
       getPost: { title, content }
@@ -86,47 +78,43 @@ function CreatePost({
   return (
     <PageWrapper>
       <Container>
-        <H1>{isEdit ? 'Edit' : 'Create'} post</H1>
-        <Form>
-          <div>
-            <label>Title</label>
-            <Input name="title" />
-            {touched.title && errors.title && <span>{errors.title}</span>}
-          </div>
-          <div>
-            <label>Content</label>
-            <Textarea component="textarea" name="content" />
-            {touched.content && errors.content && <span>{errors.content}</span>}
-          </div>
-          <div>
-            <label>Image</label>
-            {(imageUrl || fielImage) && (
-              <FileImage style={{ backgroundImage: `url(${fielImage || imageUrl})` }} />
-            )}
-            <Field
-              name="image"
-              type="file"
-              onChange={(e: any) => {
-                if (FileReader && e.target.files && e.target.files.length) {
-                  const fr = new FileReader();
-                  fr.onload = () => {
-                    setFileImage(fr.result);
-                  };
-                  fr.readAsDataURL(e.target.files[0]);
-                }
+        <BaseForm>
+          <H1>{isEdit ? 'Edit' : 'Create'} post</H1>
+          {(imageUrl || fielImage) && (
+            <FileImage style={{ backgroundImage: `url(${fielImage || imageUrl})` }} />
+          )}
+          <FormItem
+            label="Image"
+            type="file"
+            name="image"
+            touched={touched}
+            errors={errors}
+            onChange={(e: any) => {
+              if (FileReader && e.target.files && e.target.files.length) {
+                const fr = new FileReader();
+                fr.onload = () => {
+                  setFileImage(fr.result);
+                };
+                fr.readAsDataURL(e.target.files[0]);
+              }
 
-                setFieldValue('file', e.target.files[0]);
-                handleChange(e);
-              }}
-            />
-            {touched.imageUrl && errors.imageUrl && <span>{errors.imageUrl}</span>}
-          </div>
-          <div>
-            <button type="submit" disabled={isSubmitting && isValid}>
-              {isEdit ? 'Edit' : 'Create'}
-            </button>
-          </div>
-        </Form>
+              setFieldValue('file', e.target.files[0]);
+              handleChange(e);
+            }}
+          />
+          <FormItem label="Title" name="title" touched={touched} errors={errors} />
+          <FormItem
+            type="textarea"
+            label="Content"
+            name="content"
+            component="textarea"
+            touched={touched}
+            errors={errors}
+          />
+          <SubmitButton type="submit" disabled={isSubmitting && isValid}>
+            {isEdit ? 'Edit' : 'Create'}
+          </SubmitButton>
+        </BaseForm>
       </Container>
     </PageWrapper>
   );
