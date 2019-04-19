@@ -50,8 +50,8 @@ export default function withForm(Component: any) {
             : AuthMode.SIGNUP;
         const fn = authMode === AuthMode.LOGIN ? bag.props.login : bag.props.signup;
 
-        const { data } = await fn({ variables: values });
-        session.set(authMode === AuthMode.LOGIN ? data.login.token : data.register.token);
+        const { token } = await fn(values).then((res: Response) => res.json());
+        session.set(token);
         location.reload();
       } catch (e) {
         const errors = helpers.parseErrors(e.graphQLErrors);

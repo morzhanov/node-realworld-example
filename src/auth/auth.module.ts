@@ -1,12 +1,13 @@
-import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
-import { AuthResolver } from './auth.resolver';
+import { GoogleStrategy } from './google.strategy';
+import { AuthController } from './auth.controller';
+import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [
@@ -14,12 +15,19 @@ import { AuthResolver } from './auth.resolver';
     JwtModule.register({
       secretOrPrivateKey: 'secretKey',
       signOptions: {
-        expiresIn: 3600,
+        expiresIn: 36000,
       },
     }),
     UsersModule,
   ],
-  providers: [AuthService, JwtStrategy, UsersService, AuthResolver],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    LocalStrategy,
+    UsersService,
+  ],
   exports: [PassportModule, AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}

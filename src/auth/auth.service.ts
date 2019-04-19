@@ -6,9 +6,15 @@ import { UsersService } from '../users/users.service';
 import { LoginInput, RegistrationInput } from './auth.inputs';
 import { LoginResponse, RegistrationResponse } from './auth.outputs';
 import { GqlError, ErrorData } from '../utils/gql.error';
+import { User } from '../users/user.entity';
 
 export interface JwtPayload {
   id: number;
+}
+
+export interface GoogleProfile {
+  name: string;
+  email: string;
 }
 
 @Injectable()
@@ -18,17 +24,15 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(inputData: RegistrationInput): Promise<RegistrationResponse> {
+  async signUp(inputData: RegistrationInput): Promise<User> {
     const hashedPwd = await this.cryptPassword(inputData.password);
-    const user = await this.usersService.addUser({
+    return this.usersService.addUser({
       ...inputData,
       password: hashedPwd,
     });
-
-    return { token: await this.jwtService.sign({ id: user.id }), user };
   }
 
-  async signIn({ email, password }: LoginInput): Promise<LoginResponse> {
+  async signIn({ email, password }: LoginInput): Promise<User> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
@@ -44,11 +48,29 @@ export class AuthService {
       });
     }
 
-    return { token: await this.jwtService.sign({ id: user.id }) };
+    return user;
+  }
+
+  async createToken(user: User): Promise<string> {
+    return this.jwtService.sign({ id: user.id });
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
     return this.usersService.findOneById(payload.id);
+  }
+
+  async authGoogleUser(profile: GoogleProfile): Promise<User> {
+    const user = await this.usersService.findOneByEmail(profile.email);
+
+    if (user) {
+      return user;
+    }
+
+    const password = await this.cryptPassword('default');
+    return this.usersService.addUser({
+      password,
+      ...profile,
+    });
   }
 
   async cryptPassword(password): Promise<string> {

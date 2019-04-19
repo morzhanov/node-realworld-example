@@ -7,8 +7,8 @@ export default styled.button`
   color: #fff;
   font-size: 18px;
   line-height: 32px;
-  height: 32px;
-  min-width: 100px;
+  height: 48px;
+  min-width: 150px;
   padding: 8px;
   padding-top: 0;
   padding-bottom: 0;

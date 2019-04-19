@@ -13,6 +13,7 @@ export class PostsService {
   ) {}
 
   public async getPostsByAuthor(authorId: number): Promise<Post[]> {
+    console.log(authorId);
     return this.postRepository.find({ where: { authorId } });
   }
 
