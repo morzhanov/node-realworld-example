@@ -41,7 +41,9 @@ export class PostResolver {
     @Args('createPostData') createPostData: CreatePostInput,
     @Context() ctx: any,
   ) {
-    return this.postsService.addPost(createPostData, ctx.user.id);
+    const post = await this.postsService.addPost(createPostData, ctx.user.id);
+    this.pubSubService.getPubSub().publish('POST_ADDED', { postAdded: post });
+    return post;
   }
 
   @UseGuards(new GqlAuthGuard('jwt'))
@@ -59,6 +61,6 @@ export class PostResolver {
 
   @Subscription(returns => Post)
   postAdded() {
-    return this.pubSubService.getPubSub().asyncIterator('post added');
+    return this.pubSubService.getPubSub().asyncIterator('POST_ADDED');
   }
 }
