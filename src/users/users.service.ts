@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
 import { PatchUserInput } from './user.inputs';
-import { RegistrationInput } from '../auth/auth.inputs';
 import { GqlError } from '../utils/gql.error';
+import { RegistrationData } from '../auth/auth.service';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +22,7 @@ export class UsersService {
     return this.userRepository.findOne({ email });
   }
 
-  public async addUser(userData: RegistrationInput): Promise<User> {
+  public async addUser(userData: RegistrationData): Promise<User> {
     let user = await this.userRepository.findOne({
       where: { email: userData.email },
     });

@@ -1,14 +1,27 @@
-import { Args, Query, Resolver, Mutation, Context } from '@nestjs/graphql';
+import {
+  Args,
+  Query,
+  Resolver,
+  Mutation,
+  Context,
+  Subscription,
+} from '@nestjs/graphql';
 
 import { PostsService } from './posts.service';
 import { Post } from './post.entity';
 import { CreatePostInput, PatchPostInput } from './post.inputs';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/gql.auth.guard';
+import { PubSubService } from '../pubsub/pubsub.service';
+import { ConfigService } from '../config/config.service';
 
 @Resolver(Post)
 export class PostResolver {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(
+    private readonly postsService: PostsService,
+    private readonly configService: ConfigService,
+    private readonly pubSubService: PubSubService,
+  ) {}
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Query(returns => Post)
@@ -42,5 +55,10 @@ export class PostResolver {
   async deletePost(@Args('postId') postId: number) {
     await this.postsService.deletePost(postId);
     return `Post ${postId} deleted`;
+  }
+
+  @Subscription(returns => Post)
+  postAdded() {
+    return this.pubSubService.getPubSub().asyncIterator('post added');
   }
 }

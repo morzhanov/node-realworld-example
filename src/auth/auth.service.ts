@@ -3,9 +3,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt-nodejs';
 
 import { UsersService } from '../users/users.service';
-import { LoginInput, RegistrationInput } from './auth.inputs';
-import { LoginResponse, RegistrationResponse } from './auth.outputs';
-import { GqlError, ErrorData } from '../utils/gql.error';
+import { GqlError } from '../utils/gql.error';
 import { User } from '../users/user.entity';
 
 export interface JwtPayload {
@@ -17,6 +15,15 @@ export interface GoogleProfile {
   email: string;
 }
 
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface RegistrationData extends LoginData {
+  name: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,7 +31,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(inputData: RegistrationInput): Promise<User> {
+  async signUp(inputData: RegistrationData): Promise<User> {
     const hashedPwd = await this.cryptPassword(inputData.password);
     return this.usersService.addUser({
       ...inputData,
@@ -32,7 +39,7 @@ export class AuthService {
     });
   }
 
-  async signIn({ email, password }: LoginInput): Promise<User> {
+  async signIn({ email, password }: LoginData): Promise<User> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {

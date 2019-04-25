@@ -51,6 +51,10 @@ type Query {
   getPosts: [Post!]!
 }
 
+type Subscription {
+  postAdded: Post!
+}
+
 type User {
   id: Int!
   name: String!
