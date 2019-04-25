@@ -1,8 +1,11 @@
 import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloLink, concat } from 'apollo-link';
+import { ApolloLink, from, split, concat } from 'apollo-link';
 import { onError } from 'apollo-link-error';
+import { getOperationAST } from 'graphql';
+import { WebSocketLink } from 'apollo-link-ws';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import session from '../utils/session';
 import helpers from '../utils/helpers';
@@ -17,6 +20,15 @@ const authMiddleware = new ApolloLink((operation: any, forward: any) => {
   return forward && forward(operation);
 });
 
+const wsClient = new SubscriptionClient(`${process.env.WS_URL}/graphql`, {
+  connectionParams: {
+    authorization: `Bearer ${session.get()}` || null
+  },
+  reconnect: true
+});
+
+const wsLink = new WebSocketLink(wsClient);
+
 const logoutLink = onError((e: any) => {
   const { networkError, graphQLErrors } = e;
   if (
@@ -27,9 +39,18 @@ const logoutLink = onError((e: any) => {
   }
 });
 
+const mainLink = logoutLink.concat(
+  concat(authMiddleware, new HttpLink({ uri: `${process.env.API_URL}/graphql` }))
+);
+
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: logoutLink.concat(
-    concat(authMiddleware, new HttpLink({ uri: `${process.env.API_URL}/graphql` }))
+  link: split(
+    (operation: any) => {
+      const operationAST = getOperationAST(operation.query, operation.operationName);
+      return !!operationAST && operationAST.operation === 'subscription';
+    },
+    wsLink,
+    mainLink
   )
 });

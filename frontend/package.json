@@ -23,6 +23,7 @@
     "apollo-link": "^1.2.11",
     "apollo-link-error": "^1.1.10",
     "apollo-link-http": "^1.5.14",
+    "apollo-link-ws": "^1.0.17",
     "classnames": "^2.2.6",
     "dayjs": "^1.8.11",
     "formik": "^1.5.1",
@@ -39,6 +40,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "react-toastify": "^5.0.0-rc.3",
+    "subscriptions-transport-ws": "^0.9.16",
     "uuidv4": "^3.0.1"
   },
   "devDependencies": {
@@ -109,6 +111,7 @@
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "^5.14.0",
     "tslint-react": "^3.6.0",
+    "tslint-react-hooks": "^2.1.0",
     "typescript": "^3.5.0-dev.20190417",
     "typescript-styled-plugin": "^0.14.0",
     "uglifyjs-webpack-plugin": "^1.2.7",

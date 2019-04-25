@@ -6,6 +6,9 @@ import { Query, QueryResult } from 'react-apollo';
 
 import routeUrls from '../../configs/routeUrls';
 import Container from '../shared/Container';
+import { toast } from 'react-toastify';
+
+const { useEffect } = React;
 
 const HomeWrapper = styled.div`
   width: 100%;
@@ -96,38 +99,63 @@ const GET_POSTS = gql`
   }
 `;
 
-function Home() {
-  return (
-    <Query query={GET_POSTS}>
-      {({ loading, error, data }: QueryResult<any, any>) => {
-        if (loading) return 'Loading...';
-        if (error) return `Error! ${error.message}`;
-        const { getPosts } = data;
+const POST_ADDED = gql`
+  subscription {
+    postAdded {
+      id
+      title
+      content
+      imageUrl
+      author {
+        id
+        name
+      }
+    }
+  }
+`;
 
-        return (
-          <HomeWrapper>
-            <Container>
-              <H1>Your posts</H1>
-              <List>
-                {getPosts.map((post: PostData) => (
-                  <ListItem key={post.id}>
-                    <StyledPapper>
-                      <ItemImage style={{ backgroundImage: `url(${post.imageUrl})` }} />
-                      <StyledLink to={routeUrls.post.view.link(post.id)}>
-                        <ItemTitle>{post.title}</ItemTitle>
-                      </StyledLink>
-                      <ItemContent>{post.content.substring(0, 400)}&#8230;</ItemContent>
-                      <AuthorName>Author: {post.author.name}</AuthorName>
-                    </StyledPapper>
-                  </ListItem>
-                ))}
-              </List>
-            </Container>
-          </HomeWrapper>
-        );
-      }}
-    </Query>
+function Inner({ subscribeToMore, loading, error, data }: QueryResult<any, any>): any {
+  useEffect(() => {
+    subscribeToMore({
+      document: POST_ADDED,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newPost = subscriptionData.data.postAdded;
+        toast.info('Notification: New Post added.');
+        return { ...prev, getPosts: [...prev.getPosts, newPost] };
+      }
+    });
+  }, []);
+
+  if (loading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
+  const { getPosts } = data;
+
+  return (
+    <HomeWrapper>
+      <Container>
+        <H1>Your posts</H1>
+        <List>
+          {getPosts.map((post: PostData) => (
+            <ListItem key={post.id}>
+              <StyledPapper>
+                <ItemImage style={{ backgroundImage: `url(${post.imageUrl})` }} />
+                <StyledLink to={routeUrls.post.view.link(post.id)}>
+                  <ItemTitle>{post.title}</ItemTitle>
+                </StyledLink>
+                <ItemContent>{post.content.substring(0, 400)}&#8230;</ItemContent>
+                <AuthorName>Author: {post.author.name}</AuthorName>
+              </StyledPapper>
+            </ListItem>
+          ))}
+        </List>
+      </Container>
+    </HomeWrapper>
   );
+}
+
+function Home() {
+  return <Query query={GET_POSTS}>{(data: QueryResult<any, any>) => <Inner {...data} />}</Query>;
 }
 
 export default Home;
