@@ -3,6 +3,7 @@ import * as path from 'path';
 import { ConnectionOptions } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Post } from '../posts/post.entity';
+import { __DirectiveLocation } from 'graphql';
 
 export class ConfigService {
   private readonly envConfig: { [key: string]: string };
@@ -29,8 +30,8 @@ export class ConfigService {
     const dbConnection: ConnectionOptions = {
       type: 'postgres',
       entities: [User, Post],
-      migrations: [path.resolve('..' + '/migrations/*{.ts,.js}')],
-      migrationsRun: true,
+      migrations: [path.resolve(__dirname, '..') + '/migrations/*.ts'],
+      migrationsRun: false,
       dropSchema: false,
       synchronize: true,
       logging: process.env.NODE_ENV !== 'production',

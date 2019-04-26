@@ -49,4 +49,8 @@ export class Post extends BaseEntity {
   @Field()
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  @Field()
+  @Column({ nullable: true, default: 'example field' })
+  newFieldForMigrationTest?: string;
 }

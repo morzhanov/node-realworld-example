@@ -13,6 +13,7 @@ dist/
 .env.development
 .env.staging
 .env.production
+ormconfig.json
 
 build
 

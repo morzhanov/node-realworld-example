@@ -42,6 +42,7 @@ type Post {
   author: User!
   createdAt: DateTime!
   updatedAt: DateTime!
+  newFieldForMigrationTest: String!
 }
 
 type Query {
