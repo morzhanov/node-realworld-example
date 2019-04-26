@@ -10,11 +10,15 @@ import Container from '../shared/Container';
 import { BaseForm } from '../shared/BaseForm';
 import { FormItem } from '../shared/FormItem';
 import { SubmitButton } from '../shared/SubmitButton';
+import { toast } from 'react-toastify';
+import routeUrls from '../../configs/routeUrls';
 
 const { useState } = React;
 
 interface Props {
   getPostData?: any;
+  deletePost?: (variables: any) => any;
+  deletePostResult?: any;
   loading: boolean;
   error: Error;
 }
@@ -46,20 +50,38 @@ const H1 = styled.h1`
   margin-bottom: 32px !important;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  margin-top: 24px;
+`;
+
+const DeleteButton = styled(SubmitButton)`
+  background: #e00;
+  margin-left: 24px;
+`;
+
 function CreatePost({
   dirty,
   touched,
   isSubmitting,
   isValid,
+  deletePost,
   getPostData,
   loading,
   error,
+  deletePostResult,
+  history: { push },
   handleChange,
   setFieldValue,
   errors
 }: FormikProps<FormValues> & RouterProps & Props) {
   if (error) return error;
   if (loading) return 'Loading...';
+  if (deletePostResult) {
+    toast.success('Post successfully deleted');
+    push(routeUrls.home);
+    return null;
+  }
 
   const [fielImage, setFileImage] = useState();
   const isEdit = getPostData && getPostData.getPost;
@@ -111,9 +133,20 @@ function CreatePost({
             touched={touched}
             errors={errors}
           />
-          <SubmitButton type="submit" disabled={isSubmitting && isValid}>
-            {isEdit ? 'Edit' : 'Create'}
-          </SubmitButton>
+          <Buttons>
+            <SubmitButton type="submit" disabled={isSubmitting && isValid}>
+              {isEdit ? 'Edit' : 'Create'}
+            </SubmitButton>
+            {isEdit && deletePost && (
+              <DeleteButton
+                type="button"
+                disabled={isSubmitting}
+                onClick={() => deletePost({ variables: { postId: getPostData.getPost.id } })}
+              >
+                Delete Post
+              </DeleteButton>
+            )}
+          </Buttons>
         </BaseForm>
       </Container>
     </PageWrapper>

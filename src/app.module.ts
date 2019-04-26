@@ -14,6 +14,8 @@ import { MainController } from './main.controller';
 import { PubSubModule } from './pubsub/pubsub.module';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedError } from 'type-graphql';
+import { CacheService } from './cache/cache.service';
+import { CacheModule } from './cache/cache.module';
 
 const typeOrmModule = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
@@ -62,6 +64,7 @@ const graphQlModule = GraphQLModule.forRoot({
     AuthModule,
     UploadModule,
     PubSubModule,
+    CacheModule,
   ],
   controllers: [MainController],
 })

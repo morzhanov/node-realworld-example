@@ -44,6 +44,12 @@ const PATCH_POST = gql`
   }
 `;
 
+const DELETE_POST = gql`
+  mutation DeletePost($postId: Float!) {
+    deletePost(postId: $postId)
+  }
+`;
+
 const CREATE_SIGNED_URL = gql`
   mutation Signurl($filename: String!, $mimetype: String!) {
     signUrl(filename: $filename, mimetype: $mimetype)
@@ -85,6 +91,16 @@ function withPatchPost(Component: any) {
   );
 }
 
+function withDeletePost(Component: any) {
+  return (props: any) => (
+    <Mutation mutation={DELETE_POST}>
+      {(deletePost: () => void, { data }: MutationResult<any>) => (
+        <Component deletePost={deletePost} deletePostResult={data} {...props} />
+      )}
+    </Mutation>
+  );
+}
+
 function withSignedUrl(Component: any) {
   return (props: any) => (
     <Mutation mutation={CREATE_SIGNED_URL}>
@@ -97,5 +113,5 @@ function withSignedUrl(Component: any) {
 
 export function withGql(Component: any) {
   return (props: any) =>
-    withCreatePost(withPatchPost(withSignedUrl(withGetPost(Component))))(props);
+    withCreatePost(withPatchPost(withDeletePost(withSignedUrl(withGetPost(Component)))))(props);
 }

@@ -13,13 +13,11 @@ import { CreatePostInput, PatchPostInput } from './post.inputs';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/gql.auth.guard';
 import { PubSubService } from '../pubsub/pubsub.service';
-import { ConfigService } from '../config/config.service';
 
 @Resolver(Post)
 export class PostResolver {
   constructor(
     private readonly postsService: PostsService,
-    private readonly configService: ConfigService,
     private readonly pubSubService: PubSubService,
   ) {}
 
@@ -48,14 +46,17 @@ export class PostResolver {
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Mutation(returns => Post)
-  async patchPost(@Args('patchPostData') patchPostData: PatchPostInput) {
-    return this.postsService.patchPost(patchPostData);
+  async patchPost(
+    @Args('patchPostData') patchPostData: PatchPostInput,
+    @Context() ctx: any,
+  ) {
+    return this.postsService.patchPost(patchPostData, ctx.user.id);
   }
 
   @UseGuards(new GqlAuthGuard('jwt'))
   @Mutation(returns => String)
-  async deletePost(@Args('postId') postId: number) {
-    await this.postsService.deletePost(postId);
+  async deletePost(@Args('postId') postId: number, @Context() ctx: any) {
+    await this.postsService.deletePost(postId, ctx.user.id);
     return `Post ${postId} deleted`;
   }
 

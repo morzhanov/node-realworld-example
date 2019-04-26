@@ -17,6 +17,15 @@ export class ConfigService {
   }
 
   getDbConfig() {
+    const cacheConnection = {
+      type: 'redis' as 'redis',
+      options: {
+        host: this.get('REDIS_HOST'),
+        port: this.get('REDIS_PORT'),
+        password: this.get('REDIS_PASSWORD'),
+      },
+    };
+
     const dbConnection: ConnectionOptions = {
       type: 'postgres',
       entities: [User, Post],
@@ -25,6 +34,7 @@ export class ConfigService {
       dropSchema: false,
       synchronize: true,
       logging: process.env.NODE_ENV !== 'production',
+      cache: cacheConnection,
     };
     const dbConnectionUrl = this.get('DB_CONNECTION_URL');
 
