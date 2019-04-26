@@ -4,11 +4,14 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { PostsService } from './posts.service';
 import { Post } from './post.entity';
 import { PostRepository } from './post.repository';
+import { CacheService } from '../cache/cache.service';
 
 jest.mock('./post.repository');
+jest.mock('../cache/cache.service');
 
 describe('PostsService', () => {
   const postRepositoryMock = new PostRepository();
+  const cacheServiceMock = new CacheService();
   let service: PostsService;
 
   beforeEach(async () => {
@@ -19,10 +22,16 @@ describe('PostsService', () => {
           provide: getRepositoryToken(Post),
           useValue: postRepositoryMock,
         },
+        CacheService,
+        {
+          provide: 'CacheService',
+          useValue: cacheServiceMock,
+        },
       ],
     }).compile();
 
     service = module.get<PostsService>(PostsService);
+    jest.resetAllMocks();
   });
 
   it('should be defined', () => {
@@ -43,43 +52,80 @@ describe('PostsService', () => {
 
     expect(postRepositoryMock.find).toHaveBeenCalledTimes(1);
     expect(postRepositoryMock.find).toHaveBeenLastCalledWith({
-      where: { author: authorId },
+      where: { authorId },
     });
   });
 
   it('should create post', async () => {
+    const authorId = 100;
     const postData = {
       title: 'Post title',
       content: 'Post content',
-      authorId: 1000,
       imageUrl: 'image url',
     };
-    await service.addPost(postData);
+    const newPost = { ...postData, id: 1000 };
+    postRepositoryMock.save = jest.fn((_: any) => newPost as any);
 
-    expect(postRepositoryMock.create).toHaveBeenCalledTimes(1);
-    expect(postRepositoryMock.create).toHaveBeenCalledWith(postData);
+    await service.addPost(postData, authorId);
+
+    expect(cacheServiceMock.clearCache).toHaveBeenCalledWith(authorId);
+    expect(postRepositoryMock.save).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.save).toHaveBeenCalledWith({
+      ...postData,
+      authorId,
+    });
+    expect(postRepositoryMock.findOne).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.findOne).toHaveBeenCalledWith({ id: newPost.id });
+  });
+
+  it('should throw error if post not exists', async () => {
+    postRepositoryMock.findOne = jest.fn((_: any) => undefined);
+    const authorId = 100;
+    const postData = {
+      id: 100,
+      title: 'Post title',
+      content: 'Post content',
+      imageUrl: 'image url',
+    };
+
+    await expect(service.patchPost(postData, authorId)).rejects.toThrow();
   });
 
   it('should edit post', async () => {
-    const newPostData = {
-      id: 1000,
-      title: 'Post title new',
-      content: 'Post content new',
-      imageUrl: 'image url new',
+    postRepositoryMock.findOne = jest.fn((_: any) => ({} as any));
+    const authorId = 100;
+    const postData = {
+      id: 100,
+      title: 'Post title',
+      content: 'Post content',
+      imageUrl: 'image url',
     };
-    await service.patchPost(newPostData);
+    await service.patchPost(postData, authorId);
 
-    expect(postRepositoryMock.update).toHaveBeenCalledTimes(1);
-    expect(postRepositoryMock.update).toHaveBeenCalledWith(
-      { id: newPostData.id },
-      newPostData,
-    );
+    expect(cacheServiceMock.clearCache).toHaveBeenCalledWith(authorId);
+    expect(postRepositoryMock.save).toHaveBeenCalledTimes(1);
+    expect(postRepositoryMock.save).toHaveBeenCalledWith(postData);
+    expect(postRepositoryMock.findOne).toHaveBeenCalledTimes(2);
+    expect(postRepositoryMock.findOne).toHaveBeenCalledWith({
+      id: postData.id,
+    });
+  });
+
+  it('should throw error if post not exists (deleting)', async () => {
+    postRepositoryMock.findOne = jest.fn((_: any) => undefined);
+    const authorId = 100;
+    const postId = 100;
+
+    await expect(service.deletePost(postId, authorId)).rejects.toThrow();
   });
 
   it('should delete post', async () => {
+    postRepositoryMock.findOne = jest.fn((_: any) => ({} as any));
+    const authorId = 100;
     const postId = 1000;
-    await service.deletePost(postId);
+    await service.deletePost(postId, authorId);
 
+    expect(cacheServiceMock.clearCache).toHaveBeenCalledWith(authorId);
     expect(postRepositoryMock.delete).toHaveBeenCalledTimes(1);
     expect(postRepositoryMock.delete).toHaveBeenCalledWith({ id: postId });
   });
