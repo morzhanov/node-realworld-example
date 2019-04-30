@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { PubSubService } from './pubsub.service';
+import { PubSub } from 'graphql-subscriptions';
 
 describe('PubSubService', () => {
   let service: PubSubService;
@@ -14,5 +16,10 @@ describe('PubSubService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should return PubSub', () => {
+    const pubSub = service.getPubSub();
+    expect(pubSub instanceof PubSub).toBeTruthy();
   });
 });
