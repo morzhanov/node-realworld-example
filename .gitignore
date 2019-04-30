@@ -9,6 +9,8 @@ yarn-error.log*
 dist/
 .DS_Store
 
+.vscode
+
 .env
 .env.development
 .env.staging
