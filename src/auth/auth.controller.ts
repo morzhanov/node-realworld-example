@@ -13,14 +13,10 @@ import { authenticate } from 'passport';
 import { AuthService } from './auth.service';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../users/user.entity';
-import { ConfigService } from '../config/config.service';
 
 @Controller('/api/auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   login(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
