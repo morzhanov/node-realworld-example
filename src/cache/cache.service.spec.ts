@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as typeorm from 'typeorm';
 
-import { CacheService } from './Cache.service';
+import { CacheService } from './cache.service';
 
 jest.mock('typeorm', () => ({
   getConnection: jest
