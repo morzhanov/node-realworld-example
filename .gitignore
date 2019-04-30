@@ -20,6 +20,7 @@ ormconfig.json
 build
 
 src/public
+*.pem
 
 # Runtime data
 pids
