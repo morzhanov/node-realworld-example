@@ -80,7 +80,7 @@ export class AuthService {
     });
   }
 
-  async cryptPassword(password): Promise<string> {
+  async cryptPassword(password: string): Promise<string> {
     return new Promise((resolve, reject) => {
       bcrypt.genSalt(10, (err, salt) => {
         if (err) {
