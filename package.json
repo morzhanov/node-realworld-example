@@ -35,7 +35,7 @@
     "graphql": "^14.2.1",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "^4.0.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-google-plus-token": "^2.1.0",
